@@ -1,6 +1,8 @@
+/// <reference types="vitest" />
+/// <reference types="vite/client" />
 import path from 'path'
-// import type { UserConfig as VitestUserConfig } from 'vitest/config';
 import { defineConfig } from 'vite';
+// import type { UserConfig as VitestUserConfig } from 'vitest/config';
 
 // declare module 'vite' {
 //   export interface UserConfig {
