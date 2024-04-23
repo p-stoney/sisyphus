@@ -1,13 +1,13 @@
+import { clerkClient } from "@clerk/nextjs/server";
 import { Prisma,  type PrismaClient } from "@prisma/client";
 import { TRPCError } from '@trpc/server';
-import { type Session } from 'next-auth';
 import { CreateBusinessDTO } from '../validators';
 
 type CreateBusinessOptions = {
   input: CreateBusinessDTO;
   ctx: {
     db: PrismaClient;
-    session: Session | null;
+    userId: string;
   };
 }
 
@@ -16,7 +16,7 @@ export const createBusiness = async ({ input, ctx }: CreateBusinessOptions) => {
     const business = await ctx.db.business.create({
       data: {
         name: input.name,
-        userId: ctx.session?.user.id || '',
+        userId: ctx.userId || '',
       },
     });
 

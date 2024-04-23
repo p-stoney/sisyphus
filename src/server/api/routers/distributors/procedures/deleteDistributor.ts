@@ -1,13 +1,13 @@
+import { clerkClient } from "@clerk/nextjs/server";
 import { type PrismaClient } from "@prisma/client";
 import { TRPCError } from '@trpc/server';
-import { type Session } from 'next-auth';
 import { type DeleteDistributorDTO } from '../validators';
 
 type DeleteDistributorOptions = {
   input: DeleteDistributorDTO;
   ctx: {
     db: PrismaClient;
-    session: Session | null;
+    userId: string;
   };
 }
 
