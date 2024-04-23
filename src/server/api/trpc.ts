@@ -53,32 +53,32 @@ export const privateProcedure = t.procedure.use(enforceUserIsAuthed);
 // https://clerk.com/docs/components/protect
 // https://clerk.com/docs/guides/basic-rbac
 
-// const enforceUserIsAdmin = t.middleware(async ({ ctx, next }) => {
-//   if (!ctx.userId) {
-//     throw new TRPCError({
-//       code: "UNAUTHORIZED",
-//     });
-//   }
+const enforceUserIsAdmin = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.userId) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  }
 
-//   const user = await db.user.findUnique({
-//     where: {
-//       id: ctx.userId,
-//     },
-//   });
+  const user = await db.user.findUnique({
+    where: {
+      id: ctx.userId,
+    },
+  });
 
-//   if (!user || !user.role || user.role != "admin") {
-//     throw new TRPCError({
-//       code: "UNAUTHORIZED",
-//     });
-//   }
+  if (!user || !user.role || user.role != "admin") {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  }
 
-//   return next({
-//     ctx: {
-//       userId: ctx.userId,
-//     },
-//   });
-// });
+  return next({
+    ctx: {
+      userId: ctx.userId,
+    },
+  });
+});
 
-// export const adminProcedure = t.procedure.use(enforceUserIsAdmin);
+export const adminProcedure = t.procedure.use(enforceUserIsAdmin);
 // export const createTRPCRouter = t.router;
 // export const createCallerFactory = t.createCallerFactory;
