@@ -1,4 +1,3 @@
-import { clerkClient } from "@clerk/nextjs/server";
 import { Prisma,  type PrismaClient } from "@prisma/client";
 import { TRPCError } from '@trpc/server';
 import { type CreateDistributorDTO } from '../validators';

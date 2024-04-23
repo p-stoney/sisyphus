@@ -1,10 +1,10 @@
-import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
-import { api } from "~/utils/api";
-import Image from "next/image";
-import { LoadingPage, LoadingSpinner } from "~/components/loading";
-import { useState } from "react";
-import { toast } from "react-hot-toast";
+// import { api } from "~/utils/api";
+// import Image from "next/image";
+// import { LoadingPage, LoadingSpinner } from "~/components/loading";
+// import { useState } from "react";
+// import { toast } from "react-hot-toast";
 import { PageLayout } from "~/components/layout";
 
 const Home: NextPage = () => {
