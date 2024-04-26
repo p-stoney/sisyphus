@@ -77,6 +77,11 @@ model Business {
 model Distributor {
     id           String                  @id @default(cuid())
     name         String
+    email        String
+    address      String
+    city         String
+    state        String
+    postalCode   String
     paymentTerms Int
 
     businesses   BusinessDistributor[]

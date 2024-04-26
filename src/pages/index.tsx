@@ -5,7 +5,7 @@ import { type NextPage } from "next";
 // import { LoadingPage, LoadingSpinner } from "~/components/loading";
 // import { useState } from "react";
 // import { toast } from "react-hot-toast";
-import { PageLayout } from "~/components/layout";
+import { PageLayout } from "~/components/PageLayout";
 
 const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn } = useUser();
@@ -14,9 +14,9 @@ const Home: NextPage = () => {
 
   return (
     <PageLayout>
-      <div className="flex border-b border-slate-400 p-4">
+      <div className="flex min-h-screen flex-col items-center justify-center">
         {!isSignedIn && (
-          <div className="flex justify-center">
+          <div className="flex w-full justify-center border-b border-slate-400 p-4">
             <SignInButton />
           </div>
         )}
@@ -26,3 +26,16 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+//   return (
+//     <PageLayout>
+//       <div className="flex border-b border-slate-400 p-4">
+//         {!isSignedIn && (
+//           <div className="flex justify-center">
+//             <SignInButton />
+//           </div>
+//         )}
+//       </div>
+//     </PageLayout>
+//   );
+// };

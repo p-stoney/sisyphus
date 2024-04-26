@@ -7,5 +7,5 @@ export const generateSSGHelper = () =>
   createServerSideHelpers({
     router: appRouter,
     ctx: { db, userId: null },
-    transformer: superjson, // optional - adds superjson serialization
+    transformer: superjson,
   });

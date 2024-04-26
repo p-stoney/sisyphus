@@ -5,3 +5,7 @@ export const config = {
 };
 
 export default clerkMiddleware();
+
+
+// Establish authorization middleware for routes based on role/org/tenant
+// https://clerk.com/docs/references/nextjs/clerk-middleware
