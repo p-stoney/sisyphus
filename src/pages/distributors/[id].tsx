@@ -5,7 +5,7 @@ import { PageLayout } from "~/components/PageLayout";
 import Head from "next/head";
 import { DistributorView } from "~/components/DistributorView";
 
-export const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
+const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.distributor.getById.useQuery({
     distributorId: id,
   });
@@ -48,6 +48,8 @@ export const getStaticPaths = () => {
     fallback: "blocking",
   };
 };
+
+export default SinglePostPage;
 
 // import { api } from "~/utils/api";
 // import type { RouterOutputs } from "~/utils/api";

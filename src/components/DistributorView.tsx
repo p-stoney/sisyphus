@@ -16,12 +16,7 @@ export const DistributorView: React.FC<Distributor> = (distributor) => {
       <StyledCard>
         <DistributorCardContent {...distributor} />
         <TableWrapper>
-          <DistributorTable
-            invoices={distributor.invoices.map((invoice) => ({
-              ...invoice,
-              items: [],
-            }))}
-          />
+          <DistributorTable invoices={distributor.invoices} />
         </TableWrapper>
       </StyledCard>
     </Content>

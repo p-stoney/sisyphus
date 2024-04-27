@@ -2,8 +2,6 @@ import { type PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { type GetByIdDTO } from "../validators";
 
-// TODO: Determine return type of procedures
-
 type GetByIdOptions = {
   input: GetByIdDTO;
   ctx: {
@@ -20,7 +18,11 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
       id: distributorId,
     },
     include: {
-      invoices: true,
+      invoices: {
+        include: {
+          items: true,
+        },
+      },
     },
   });
 
@@ -40,6 +42,15 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
     state: distributor.state,
     postalCode: distributor.postalCode,
     paymentTerms: distributor.paymentTerms,
-    invoices: distributor.invoices,
+    invoices: distributor.invoices.map((invoice) => ({
+      id: invoice.id,
+      dueBy: invoice.dueBy,
+      status: invoice.status,
+      items: invoice.items,
+      amountDue: invoice.items.reduce(
+        (sum, item) => sum + item.price.toNumber() * item.quantity,
+        0,
+      ),
+    })),
   };
 };
