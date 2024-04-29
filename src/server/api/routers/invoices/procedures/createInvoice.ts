@@ -7,13 +7,13 @@ type CreateInvoiceOptions = {
   ctx: {
     db: PrismaClient;
     userId: string;
-    businessId: string;
   };
 };
 
 export const createInvoice = async ({ input, ctx }: CreateInvoiceOptions) => {
-  const { db, businessId } = ctx;
-  const { distributorId, items, paymentTerms, dateGenerated } = input;
+  const { db } = ctx;
+  const { businessId, distributorId, items, paymentTerms, dateGenerated } =
+    input;
 
   try {
     const dueBy = new Date(dateGenerated);

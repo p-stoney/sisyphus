@@ -30,29 +30,28 @@ const DistributorModal: React.FC<DistributorModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { data: businessId, isLoading: isBusinessIdLoading } =
+    api.user.getBusinessId.useQuery();
   const newDistributor = api.distributor.createDistributor.useMutation();
 
-  const handleSubmit = (values: FormValues) => {
-    newDistributor.mutate(
-      {
-        name: values.name,
-        email: values.email,
-        address: values.address,
-        city: values.city,
-        state: values.state,
-        postalCode: values.postalCode,
-        paymentTerms: values.paymentTerms,
-      },
-      {
-        onSuccess: () => {
-          onClose();
-        },
-        onError: (error) => {
-          console.error("Error creating distributor:", error);
-        },
-      },
-    );
+  const handleSubmit = async (values: FormValues) => {
+    if (!businessId) {
+      console.error("Business ID not loaded");
+      return;
+    }
+
+    try {
+      await newDistributor.mutateAsync({
+        ...values,
+        businessId,
+      });
+      onClose();
+    } catch (error) {
+      console.error("Failed to create distributor", error);
+    }
   };
+
+  if (isBusinessIdLoading) return <div>Loading business details...</div>;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="New Distributor">

@@ -28,10 +28,11 @@ export const CreateInvoiceItemSchema = z.object({
 });
 
 export const CreateInvoiceSchema = z.object({
+  businessId: z.string(),
   distributorId: z.string(),
   items: z.array(CreateInvoiceItemSchema),
   paymentTerms: z.number().min(0),
-  dateGenerated: z.string(), // Assuming ISO date string, you might want to validate it more specifically or convert to Date in the procedure
+  dateGenerated: z.string(),
 });
 
 export const DeleteInvoiceSchema = z.object({

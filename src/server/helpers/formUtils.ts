@@ -10,17 +10,20 @@ export interface FormValues {
   postalCode: string;
 
   // Invoice-specific fields
-  distributorId?: string;
-  dateGenerated?: string | undefined;
+  businessId?: string;
+  distributorId: string;
+  dateGenerated: string;
   paymentTerms: number;
-  items: Array<{
-    id: string;
-    name: string;
-    quantity: number;
-    price: number;
-    total: number;
-  }>;
+  items: { id: string; name: string; price: number; quantity: number }[];
 }
+
+// export interface InvoiceFormValues {
+//   businessId: string;
+//   distributorId: string;
+//   dateGenerated: string;
+//   paymentTerms: number;
+//   items: { name: string; price: number; quantity: number; }[];
+// }
 
 export const baseDistributorSchema = z.object({
   name: z.string().min(1, "Distributor name is required"),
@@ -58,9 +61,7 @@ export const initialFormValues: FormValues = {
   postalCode: "",
   dateGenerated: "",
   paymentTerms: 30,
-  items: [
-    { id: `temp-${Date.now()}`, name: "", quantity: 0, price: 0, total: 0 },
-  ],
+  items: [{ id: `temp-${Date.now()}`, name: "", quantity: 0, price: 0 }],
 };
 
 export const ValidationSchema = z.object({
@@ -82,30 +83,26 @@ export const ValidationSchema = z.object({
 });
 
 export interface InvoiceFormValues {
+  businessId: string;
   distributorId: string;
   dateGenerated: string;
   paymentTerms: number;
-  items: Array<{
-    id: string;
-    name: string;
-    quantity: number;
-    price: number;
-  }>;
+  items: { name: string; price: number; quantity: number }[];
 }
 
-export const initialInvoiceFormValues: InvoiceFormValues = {
-  distributorId: "",
-  dateGenerated: new Date().toISOString().slice(0, 10), // formatted as "YYYY-MM-DD"
-  paymentTerms: 30,
-  items: [
-    {
-      id: `temp-${Date.now()}`,
-      name: "",
-      quantity: 1,
-      price: 0.0,
-    },
-  ],
-};
+// export const initialInvoiceFormValues: InvoiceFormValues = {
+//   distributorId: "",
+//   dateGenerated: new Date().toISOString().slice(0, 10), // formatted as "YYYY-MM-DD"
+//   paymentTerms: 30,
+//   items: [
+//     {
+//       id: `temp-${Date.now()}`,
+//       name: "",
+//       quantity: 1,
+//       price: 0.0,
+//     },
+//   ],
+// };
 
 export const InvoiceItemSchema = z.object({
   name: z.string().min(1, "Item name is required"),

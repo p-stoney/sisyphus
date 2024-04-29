@@ -7,7 +7,6 @@ type CreateDistributorOptions = {
   ctx: {
     db: PrismaClient;
     userId: string;
-    businessId: string;
   };
 };
 
@@ -15,11 +14,13 @@ export const createDistributor = async ({
   input,
   ctx,
 }: CreateDistributorOptions) => {
-  const { db, businessId } = ctx;
+  const { db } = ctx;
+  const { businessId, ...distributorData } = input;
+
   try {
     const distributor = await db.distributor.create({
       data: {
-        ...input,
+        ...distributorData,
         businesses: {
           create: {
             businessId,
@@ -28,16 +29,7 @@ export const createDistributor = async ({
       },
     });
 
-    return {
-      id: distributor.id,
-      name: distributor.name,
-      email: distributor.email,
-      address: distributor.address,
-      city: distributor.city,
-      state: distributor.state,
-      postalCode: distributor.postalCode,
-      paymentTerms: distributor.paymentTerms,
-    };
+    return distributor;
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

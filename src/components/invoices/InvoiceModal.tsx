@@ -30,27 +30,20 @@ interface InvoiceModalProps {
 const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
   const [distributorId, setDistributorId] = React.useState("");
   const newInvoice = api.invoice.createInvoice.useMutation();
-  const {
-    data: distributor,
-    isLoading,
-    isError,
-  } = api.distributor.getById.useQuery(
-    { distributorId },
-    { enabled: !!distributorId },
-  );
+  const { data: businessId, isLoading: isBusinessIdLoading } =
+    api.user.getBusinessId.useQuery();
 
   const handleSubmit = (values: FormValues) => {
-    if (!distributor) {
-      console.error("Distributor details not loaded");
+    if (!businessId) {
+      console.error("Business ID not loaded");
       return;
     }
 
     newInvoice.mutate(
       {
-        distributorId: distributor.id,
-        items: values.items || [],
-        paymentTerms: values.paymentTerms,
-        dateGenerated: values.dateGenerated || "",
+        ...values,
+        distributorId: distributorId,
+        businessId: businessId,
       },
       {
         onSuccess: () => onClose(),
@@ -59,9 +52,8 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
     );
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError || !distributor)
-    return <div>Error loading distributor details.</div>;
+  if (isBusinessIdLoading) return <div>Loading...</div>;
+  if (!businessId) return <div>Business ID not available.</div>;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="New Invoice">

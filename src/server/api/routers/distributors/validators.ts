@@ -14,6 +14,7 @@ export const ListDistributorsSchema = z.object({
 });
 
 export const CreateDistributorSchema = z.object({
+  businessId: z.string(),
   name: z.string(),
   email: z.string().email(),
   address: z.string(),
