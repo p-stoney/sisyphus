@@ -7,6 +7,7 @@ type CreateDistributorOptions = {
   ctx: {
     db: PrismaClient;
     userId: string;
+    businessId: string;
   };
 };
 
@@ -14,16 +15,16 @@ export const createDistributor = async ({
   input,
   ctx,
 }: CreateDistributorOptions) => {
+  const { db, businessId } = ctx;
   try {
-    const distributor = await ctx.db.distributor.create({
+    const distributor = await db.distributor.create({
       data: {
-        name: input.name,
-        email: input.email,
-        address: input.address,
-        city: input.city,
-        state: input.state,
-        postalCode: input.postalCode,
-        paymentTerms: input.paymentTerms,
+        ...input,
+        businesses: {
+          create: {
+            businessId,
+          },
+        },
       },
     });
 

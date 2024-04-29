@@ -1,15 +1,19 @@
 import React from "react";
 import { IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { StyledBackButton } from "../common/Button";
+import { StyledBackButton, ToggleButton, XIcon } from "../common/Button";
 import { Header, HeaderContent } from "../common/Header";
 
-interface SingleDistributorHeaderProps {
+interface InvoiceDetailHeaderProps {
+  status: "Paid" | "Pending";
   onBack: () => void;
+  onStatusChange: () => void;
 }
 
-const SingleDistributorHeader: React.FC<SingleDistributorHeaderProps> = ({
+const SingleInvoiceHeader: React.FC<InvoiceDetailHeaderProps> = ({
+  status,
   onBack,
+  onStatusChange,
 }) => {
   return (
     <Header>
@@ -19,9 +23,13 @@ const SingleDistributorHeader: React.FC<SingleDistributorHeaderProps> = ({
             <ArrowBackIcon />
           </IconButton>
         </StyledBackButton>
+        <ToggleButton $status={status} onClick={onStatusChange}>
+          <XIcon $status={status}>X</XIcon>
+          {status === "Paid" ? "Mark as Pending" : "Mark as Paid"}
+        </ToggleButton>
       </HeaderContent>
     </Header>
   );
 };
 
-export default SingleDistributorHeader;
+export default SingleInvoiceHeader;

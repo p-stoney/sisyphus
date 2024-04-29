@@ -34,6 +34,7 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
   }
 
   return {
+    ...distributor,
     id: distributor.id,
     name: distributor.name,
     email: distributor.email,

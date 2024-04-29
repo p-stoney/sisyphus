@@ -37,10 +37,14 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
   }, 0);
 
   return {
+    ...invoice,
     id: input.invoiceId,
     distributorId: invoice[1]?.distributorId,
     businessId: invoice[1]?.businessId,
-    items: invoice[0]?.items,
-    amountDue,
+    status: invoice[1]?.status,
+    dueBy: invoice[1]?.dueBy,
+    items: invoice[0],
+    createdAt: invoice[1]?.createdAt,
+    amountDue: amountDue,
   };
 };

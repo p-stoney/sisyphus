@@ -138,6 +138,7 @@ model Invoice {
 
 model InvoiceItem {
     id        String       @id @default(cuid())
+    name      String
     price     Decimal
     quantity  Int
 

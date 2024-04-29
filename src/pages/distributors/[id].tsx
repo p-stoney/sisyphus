@@ -1,25 +1,23 @@
 import type { GetStaticProps, NextPage } from "next";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { api } from "~/utils/api";
-import { PageLayout } from "~/components/PageLayout";
 import Head from "next/head";
-import { DistributorView } from "~/components/DistributorView";
+import DistributorView from "~/components/DistributorView";
 
 const SingleDistributorPage: NextPage<{ id: string }> = ({ id }) => {
-  const { data } = api.distributor.getById.useQuery({
+  const { data, isLoading, isError } = api.distributor.getById.useQuery({
     distributorId: id,
   });
 
-  if (!data) return <div>404</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (isError || !data) return <div>Invoice not found</div>;
 
   return (
     <>
       <Head>
         <title>Distributor: {`${data.name}`}</title>
       </Head>
-      <PageLayout>
-        <DistributorView {...data} />
-      </PageLayout>
+      <DistributorView {...data} />
     </>
   );
 };

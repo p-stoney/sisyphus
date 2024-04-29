@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
-import { Grid, InputLabel, TextField, Select } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
+import {
+  Grid,
+  InputLabel,
+  TextField,
+  Select,
+  FormControl,
+  MenuItem,
+  FormHelperText,
+} from "@mui/material";
 import type { Distributor } from "@prisma/client";
 import type { FormikErrors, FormikTouched } from "formik";
 import type { FormValues } from "~/server/helpers/formUtils";
@@ -8,47 +15,82 @@ import type { FormValues } from "~/server/helpers/formUtils";
 interface DistributorInfoProps {
   usStates: string[];
   handleChange: (field: keyof FormValues, value: string | number) => void;
+  setDistributorId?: (id: string) => void;
   values: FormValues;
   distributors: Distributor[];
   errors: FormikErrors<FormValues>;
   touched: FormikTouched<FormValues>;
+  isDropdown?: boolean;
 }
 
 const DistributorInfo: React.FC<DistributorInfoProps> = ({
   usStates,
   handleChange,
+  setDistributorId,
   values,
   distributors,
   errors,
   touched,
+  isDropdown = false,
 }) => {
   const ITEM_HEIGHT = 48;
 
   useEffect(() => {
-    const distributor = distributors.find((d) => d.name === values.name);
-    if (distributor) {
-      handleChange("email", distributor.email);
-      handleChange("address", distributor.address);
-      handleChange("city", distributor.city);
-      handleChange("postalCode", distributor.postalCode);
-      handleChange("state", distributor.state);
+    if (values.distributorId) {
+      const distributor = distributors.find(
+        (d) => d.id === values.distributorId,
+      );
+      if (distributor) {
+        handleChange("name", distributor.name);
+        handleChange("email", distributor.email);
+        handleChange("address", distributor.address);
+        handleChange("city", distributor.city);
+        handleChange("postalCode", distributor.postalCode);
+        handleChange("state", distributor.state);
+      }
     }
-  }, [values.name, distributors, handleChange]);
+  }, [values.distributorId, distributors, handleChange]);
 
   return (
     <Grid container spacing={2} marginBottom=".75rem">
-      {/* Distributor Name Field */}
+      {/* Conditional Distributor Name Field */}
       <Grid item xs={12} md={6}>
-        <InputLabel htmlFor="distributor-name">Distributor Name</InputLabel>
-        <TextField
-          fullWidth
-          id="distributor-name"
-          name="distributorName"
-          value={values.name}
-          onChange={(e) => handleChange("name", e.target.value)}
-          error={touched.name && Boolean(errors.name)}
-          helperText={touched.name && errors.name}
-        />
+        <FormControl fullWidth error={touched.name && Boolean(errors.name)}>
+          <InputLabel id="distributor-select-label">Distributor</InputLabel>
+          {isDropdown ? (
+            <Select
+              labelId="distributor-select-label"
+              id="distributor-select"
+              name="distributorId"
+              value={values.distributorId}
+              onChange={(e) => {
+                handleChange("distributorId", e.target.value);
+                if (setDistributorId) {
+                  setDistributorId(e.target.value);
+                }
+              }}
+              displayEmpty
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {distributors.map((distributor) => (
+                <MenuItem key={distributor.id} value={distributor.id}>
+                  {distributor.name}
+                </MenuItem>
+              ))}
+            </Select>
+          ) : (
+            <TextField
+              fullWidth
+              id="distributor-name"
+              name="name"
+              value={values.name}
+              onChange={(e) => handleChange("name", e.target.value)}
+            />
+          )}
+          <FormHelperText>{touched.name && errors.name}</FormHelperText>
+        </FormControl>
       </Grid>
       {/* Email Address Field */}
       <Grid item xs={12} md={6}>

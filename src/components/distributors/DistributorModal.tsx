@@ -1,10 +1,11 @@
 import React from "react";
-import type { z } from "zod";
 import { Formik, Form } from "formik";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import {
+  type FormValues,
   ValidationSchema,
+  initialFormValues,
   usStates,
   paymentTermsOptions,
 } from "~/server/helpers/formUtils";
@@ -24,8 +25,6 @@ interface DistributorModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-type FormValues = z.infer<typeof ValidationSchema>;
 
 const DistributorModal: React.FC<DistributorModalProps> = ({
   isOpen,
@@ -58,15 +57,7 @@ const DistributorModal: React.FC<DistributorModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="New Distributor">
       <Formik<FormValues>
-        initialValues={{
-          name: "",
-          email: "",
-          address: "",
-          city: "",
-          state: "",
-          postalCode: "",
-          paymentTerms: 30,
-        }}
+        initialValues={initialFormValues}
         validationSchema={zodResolver(ValidationSchema)}
         onSubmit={handleSubmit}
       >

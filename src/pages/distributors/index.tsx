@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
-import type { FilterCriteria, FilterOption } from "~/types";
+import type { DFilterCriteria, FilterOption } from "~/types";
 import MainContent from "~/components/common/MainContent";
 import { List } from "~/components/common/List";
 import DistributorHeader from "~/components/distributors/DistributorHeader";
@@ -16,7 +16,7 @@ const DistributorsPage = () => {
 
   const handleNewDistributorClick = () => setModalOpen(true);
 
-  const [filterCriteria, setFilterCriteria] = useState<FilterCriteria>({
+  const [filterCriteria, setFilterCriteria] = useState<DFilterCriteria>({
     allInvoicesPaid: undefined,
     distributorName: undefined,
   });
@@ -25,7 +25,7 @@ const DistributorsPage = () => {
     (distributor) => distributor.allInvoicesPaid === false,
   ).length;
 
-  const handleFilterChange = (newCriteria: FilterCriteria) => {
+  const handleFilterChange = (newCriteria: DFilterCriteria) => {
     setFilterCriteria(newCriteria);
   };
 

@@ -81,3 +81,53 @@ export const StyledBackButton = styled.div`
     margin-left: 0.1rem;
   }
 `;
+
+export const ToggleButton = styled.button<{ $status: "Paid" | "Pending" }>`
+  background-color: ${(props) =>
+    props.$status === "Paid" ? "#08c28d" : "#e89e3f"};
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.84rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  margin-right: 0.25rem;
+  outline: none;
+
+  &:hover {
+    background-color: ${(props) =>
+      props.$status === "Paid" ? "#06a57d" : "#c7853c"};
+  }
+
+  @media (max-width: 600px) {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.65rem;
+    gap: 0.15rem;
+    margin-right: 0.15rem;
+  }
+`;
+
+export const XIcon = styled.span<{ $status: "Paid" | "Pending" }>`
+  background-color: #eee9da;
+  border: 1px solid
+    ${(props) => (props.$status === "Paid" ? "#08c28d" : "#e89e3f")};
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.1rem;
+  color: ${(props) => (props.$status === "Paid" ? "#08c28d" : "#e89e3f")};
+  margin-left: -0.3rem;
+
+  @media (max-width: 600px) {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.85rem;
+  }
+`;

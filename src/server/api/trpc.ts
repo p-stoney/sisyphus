@@ -5,15 +5,39 @@ import { ZodError } from "zod";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "../db";
 
-export const createTRPCContext = (opts: CreateNextContextOptions) => {
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const { req } = opts;
   const session = getAuth(req);
 
   const userId = session.userId;
 
+  if (!userId) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "User must be authenticated",
+    });
+  }
+
+  const userWithBusiness = await db.user.findUnique({
+    where: { id: userId },
+    include: {
+      businesses: true,
+    },
+  });
+
+  if (!userWithBusiness || userWithBusiness.businesses.length === 0) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "No business found for the user",
+    });
+  }
+
+  const businessId = userWithBusiness.businesses[0]!.id;
+
   return {
     db,
     userId,
+    businessId,
   };
 };
 
