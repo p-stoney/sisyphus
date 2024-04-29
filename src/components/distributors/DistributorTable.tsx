@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { Table } from "../common/Table";
 import { TableBody, TableCell, TableRow, TableHead, Box } from "@mui/material";
 import { RightCaret } from "../common/RightCaret";
@@ -21,15 +21,8 @@ interface DistributorTableProps {
 }
 
 const DistributorTable: React.FC<DistributorTableProps> = ({ invoices }) => {
-  const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const handleStatusClick = (invoiceId: string) => {
-    router
-      .push(`/invoice/${invoiceId}`)
-      .catch((err) => console.error("Failed to navigate:", err));
-  };
 
   const totalUnpaidAmount = invoices
     .filter((invoice) => invoice.status === "UNPAID")
@@ -97,10 +90,9 @@ const DistributorTable: React.FC<DistributorTableProps> = ({ invoices }) => {
                 <StatusBadge $status={invoice.status}>
                   {invoice.status}
                 </StatusBadge>
-                <RightCaret
-                  onClick={() => handleStatusClick(invoice.id)}
-                  alt="Go to details"
-                />
+                <Link href={`/invoice/${invoice.id}`} passHref>
+                  <RightCaret alt="Go to details" />
+                </Link>
               </Box>
             </TableCell>
           </TableRow>

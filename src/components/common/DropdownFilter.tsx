@@ -15,6 +15,24 @@ export interface FilterCriteria {
   allInvoicesPaid?: boolean;
 }
 
+export const CheckboxRow = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-evenly;
+  margin-top: 0.25rem;
+`;
+
+export const CheckboxLabelPair = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+`;
+
+export const InputField = styled.input`
+  width: 10rem;
+  margin-top: 0.2rem;
+`;
+
 /**
  * DropdownFilterProps interface represents the props taken by the DropdownFilter component.
  * - `filterOptions`: Array of objects representing the filter options available.

@@ -25,7 +25,13 @@ export const DeleteInvoiceSchema = z.object({
   invoiceId: z.number(),
 });
 
+export const UpdateInvoiceSchema = z.object({
+  invoiceId: z.string(),
+  newStatus: z.enum(["PAID", "UNPAID"]),
+});
+
 export type GetByIdDTO = z.TypeOf<typeof GetByIdSchema>;
 export type GetByDistributorIdDTO = z.TypeOf<typeof GetByDistributorIdSchema>;
 export type CreateInvoiceDto = z.TypeOf<typeof CreateInvoiceSchema>;
 export type DeleteInvoiceDto = z.TypeOf<typeof DeleteInvoiceSchema>;
+export type UpdateInvoiceDto = z.TypeOf<typeof UpdateInvoiceSchema>;

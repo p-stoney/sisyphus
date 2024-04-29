@@ -6,21 +6,27 @@ import { type NextPage } from "next";
 // import { useState } from "react";
 // import { toast } from "react-hot-toast";
 import { PageLayout } from "~/components/PageLayout";
+import DistributorsPage from "~/pages/distributors";
 
 const Home: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn } = useUser();
 
-  if (!userLoaded) return <div />;
+  // Return a loading or placeholder element until user info is loaded
+  if (!userLoaded) return <div>Loading...</div>;
 
   return (
     <PageLayout>
-      <div className="flex min-h-screen flex-col items-center justify-center">
-        {!isSignedIn && (
+      {isSignedIn ? (
+        // Render DistributorsPage when the user is signed in
+        <DistributorsPage />
+      ) : (
+        // Show the sign-in button if the user is not signed in
+        <div className="flex min-h-screen flex-col items-center justify-center">
           <div className="flex w-full justify-center border-b border-slate-400 p-4">
             <SignInButton />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </PageLayout>
   );
 };

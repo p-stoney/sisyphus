@@ -30,6 +30,11 @@ export const createDistributor = async ({
     return {
       id: distributor.id,
       name: distributor.name,
+      email: distributor.email,
+      address: distributor.address,
+      city: distributor.city,
+      state: distributor.state,
+      postalCode: distributor.postalCode,
       paymentTerms: distributor.paymentTerms,
     };
   } catch (error) {

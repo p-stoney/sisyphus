@@ -1,5 +1,30 @@
 import styled from "styled-components";
 
+interface ButtonProps {
+  $fullWidth?: boolean;
+}
+
+export const ButtonWithProps = styled.button<ButtonProps>`
+  background-color: #6096b4;
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.84rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  outline: none;
+  width: ${(props) => (props.$fullWidth ? "100%" : "auto")};
+
+  &:hover {
+    background-color: #2a7096;
+  }
+`;
+
 export const Button = styled.button`
   background-color: #6096b4;
   color: white;

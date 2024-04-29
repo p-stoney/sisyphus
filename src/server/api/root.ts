@@ -11,6 +11,7 @@ export const appRouter = createTRPCRouter({
 
 export type AppRouter = typeof appRouter;
 
+// TODO: In formUtils, look at optional properties of FormValues
 // TODO: Decide default import or not
 // TODO: Determine return type of procedures
 // TODO: Implement dynamic profile picture fetch in AppBar
