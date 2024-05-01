@@ -1,5 +1,6 @@
-import { createTRPCRouter, privateProcedure, adminProcedure } from "../../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import {
+  GetAllSchema,
   GetByIdSchema,
   ListDistributorsSchema,
   CreateDistributorSchema,
@@ -14,21 +15,23 @@ import {
 } from "./procedures";
 
 export const distributorRouter = createTRPCRouter({
-  getAll: privateProcedure.query(async ({ ctx }) => getAll({ ctx })),
+  getAll: protectedProcedure
+    .input(GetAllSchema)
+    .query(async ({ input, ctx }) => getAll({ input, ctx })),
 
-  getById: privateProcedure
+  getById: protectedProcedure
     .input(GetByIdSchema)
     .query(async ({ input, ctx }) => getById({ input, ctx })),
 
-  list: privateProcedure
+  list: protectedProcedure
     .input(ListDistributorsSchema)
     .query(async ({ input, ctx }) => list({ input, ctx })),
 
-  createDistributor: adminProcedure
+  createDistributor: protectedProcedure
     .input(CreateDistributorSchema)
     .mutation(async ({ input, ctx }) => createDistributor({ input, ctx })),
 
-  deleteDistributor: adminProcedure
+  deleteDistributor: protectedProcedure
     .input(DeleteDistributorSchema)
     .mutation(async ({ input, ctx }) => deleteDistributor({ input, ctx })),
 });

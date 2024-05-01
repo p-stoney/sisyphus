@@ -1,17 +1,18 @@
-import { type PrismaClient } from "@prisma/client";
+import type { Context } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { type GetAllDTO } from "../validators";
 
 type GetAllOptions = {
-  ctx: {
-    db: PrismaClient;
-    userId: string;
-  };
+  input: GetAllDTO;
+  ctx: Context;
 };
 
-export const getAll = async ({ ctx }: GetAllOptions) => {
-  const { db, userId } = ctx;
+export const getAll = async ({ input, ctx }: GetAllOptions) => {
+  console.log("input", input);
+  const { userId } = input;
+  console.log("userId", userId);
 
-  const distributors = await db.distributor.findMany({
+  const distributors = await ctx.db.distributor.findMany({
     where: {
       businesses: {
         some: {
@@ -29,6 +30,30 @@ export const getAll = async ({ ctx }: GetAllOptions) => {
       },
     },
   });
+
+  // const distributors = await ctx.db.distributor.findMany({
+  //   where: {
+  //     businesses: {
+  //       some: {
+  //         business: {
+  //           userId: userId,
+  //         },
+  //       },
+  //     },
+  //   },
+  //   include: {
+  //     businesses: {
+  //       include: {
+  //         business: true,
+  //       },
+  //     },
+  //     invoices: {
+  //       include: {
+  //         items: true,
+  //       },
+  //     },
+  //   },
+  // });
 
   if (!distributors.length) {
     throw new TRPCError({

@@ -15,7 +15,7 @@ const SingleInvoicePage: NextPage<{ id: string }> = ({ id }) => {
   return (
     <>
       <Head>
-        <title>Invoice: {`${data.id}`}</title>
+        <title>Invoice: {`${data.invoice.id}`}</title>
       </Head>
       <InvoiceView {...data} />
     </>

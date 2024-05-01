@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/nextjs";
 import { useState, useMemo } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
 import type { DFilterCriteria, FilterOption } from "~/types";
@@ -10,16 +11,20 @@ import DistributorModal from "~/components/distributors/DistributorModal";
 type Distributor = RouterOutputs["distributor"]["getAll"][number];
 
 const DistributorsPage = () => {
-  const { data } = api.distributor.getAll.useQuery();
-
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-
-  const handleNewDistributorClick = () => setModalOpen(true);
 
   const [filterCriteria, setFilterCriteria] = useState<DFilterCriteria>({
     allInvoicesPaid: undefined,
     distributorName: undefined,
   });
+
+  const { userId } = useAuth();
+
+  const activeId = userId as string;
+
+  const { data } = api.distributor.getAll.useQuery({ userId: activeId });
+
+  const handleNewDistributorClick = () => setModalOpen(true);
 
   const pendingDistributorsCount = data?.filter(
     (distributor) => distributor.allInvoicesPaid === false,
@@ -84,3 +89,21 @@ const DistributorsPage = () => {
 };
 
 export default DistributorsPage;
+
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const { userId } = getAuth(ctx.req);
+//   const { db } = ctx;
+
+//   if (!userId) {
+//     return {
+//       redirect: {
+//         destination: "/sign-in",
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   const user = await db.user.findUnique({ where: { id: userId } });
+
+//   return { props: { ...buildClerkProps(ctx.req), user } };
+// };

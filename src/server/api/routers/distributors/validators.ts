@@ -4,6 +4,10 @@ export const GetByIdSchema = z.object({
   distributorId: z.string(),
 });
 
+export const GetAllSchema = z.object({
+  userId: z.string(),
+});
+
 export const ListDistributorsSchema = z.object({
   filterCriteria: z
     .object({
@@ -28,6 +32,7 @@ export const DeleteDistributorSchema = z.object({
   distributorId: z.string(),
 });
 
+export type GetAllDTO = z.TypeOf<typeof GetAllSchema>;
 export type GetByIdDTO = z.TypeOf<typeof GetByIdSchema>;
 export type ListDistributorsDTO = z.TypeOf<typeof ListDistributorsSchema>;
 export type CreateDistributorDTO = z.TypeOf<typeof CreateDistributorSchema>;

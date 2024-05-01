@@ -13,7 +13,20 @@ type GetByIdOptions = {
 export const getById = async ({ input, ctx }: GetByIdOptions) => {
   const { invoiceId } = input;
 
-  const invoice = await ctx.db.invoice.findMany({
+  const invoice = await ctx.db.invoice.findUnique({
+    where: {
+      id: invoiceId,
+    },
+  });
+
+  if (!invoice) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Invoice not found",
+    });
+  }
+
+  const invoiceItems = await ctx.db.invoice.findMany({
     where: {
       id: invoiceId,
     },
@@ -22,14 +35,14 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
     },
   });
 
-  if (!invoice) {
+  if (!invoiceItems) {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: "Invoices not found",
     });
   }
 
-  const amountDue = invoice.reduce((acc, curr) => {
+  const amountDue = invoiceItems.reduce((acc, curr) => {
     const total = curr.items.reduce((acc, curr) => {
       return acc + curr.quantity;
     }, 0);
@@ -37,14 +50,8 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
   }, 0);
 
   return {
-    ...invoice,
-    id: input.invoiceId,
-    distributorId: invoice[1]?.distributorId,
-    businessId: invoice[1]?.businessId,
-    status: invoice[1]?.status,
-    dueBy: invoice[1]?.dueBy,
-    items: invoice[0],
-    createdAt: invoice[1]?.createdAt,
-    amountDue: amountDue,
+    invoice,
+    invoiceItems,
+    amountDue,
   };
 };

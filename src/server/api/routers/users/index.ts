@@ -1,4 +1,4 @@
-import { createTRPCRouter, privateProcedure, adminProcedure } from "../../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import {
   CreateAssociationSchema,
   RemoveAssociationSchema,
@@ -12,19 +12,19 @@ import {
 } from "./procedures";
 
 export const userRouter = createTRPCRouter({
-  getBusinessId: privateProcedure.query(async ({ ctx }) =>
+  getBusinessId: protectedProcedure.query(async ({ ctx }) =>
     getBusinessId({ ctx }),
   ),
 
-  createUserAssociation: adminProcedure
+  createUserAssociation: protectedProcedure
     .input(CreateAssociationSchema)
     .mutation(async ({ input, ctx }) => createUserAssociation({ input, ctx })),
 
-  removeUserAssociation: adminProcedure
+  removeUserAssociation: protectedProcedure
     .input(RemoveAssociationSchema)
     .mutation(async ({ input, ctx }) => removeUserAssociation({ input, ctx })),
 
-  deleteUser: adminProcedure
+  deleteUser: protectedProcedure
     .input(DeleteUserSchema)
     .mutation(async ({ input, ctx }) => deleteUser({ input, ctx })),
 });

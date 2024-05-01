@@ -90,7 +90,7 @@ const DistributorTable: React.FC<DistributorTableProps> = ({ invoices }) => {
                 <StatusBadge $status={invoice.status}>
                   {invoice.status}
                 </StatusBadge>
-                <Link href={`/invoice/${invoice.id}`} passHref>
+                <Link href={`/invoices/${invoice.id}`} passHref>
                   <RightCaret alt="Go to details" />
                 </Link>
               </Box>

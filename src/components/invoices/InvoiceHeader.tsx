@@ -88,13 +88,13 @@ const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({
     <CommonHeader
       title="Invoices"
       subtitle={`${pendingInvoiceCount} pending invoices`}
-      onNewButtonClick={onNewInvoiceClick}
       renderFilterContent={renderInvoiceFilterContent}
       dropdownLabel={isMobile ? "Filter" : "Filter invoices"}
       filterOptions={filterOptions}
       onFilterChange={onFilterChange}
       filterCriteria={filterCriteria}
       newButtonLabel="New Invoice"
+      onNewButtonClick={onNewInvoiceClick}
     />
   );
 };

@@ -18,12 +18,18 @@ export const getBusinessId = async ({ ctx }: GetBusinessIdOptions) => {
     },
   });
 
-  if (!user || !user.businesses || !user.businesses.length) {
+  const business = await db.business.findFirst({
+    where: {
+      userId: userId,
+    },
+  });
+
+  if (!user || !business) {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: "No businesses found for user",
     });
   }
 
-  return user.businesses[0]!.id;
+  return business.id;
 };

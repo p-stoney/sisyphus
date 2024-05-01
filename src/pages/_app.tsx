@@ -1,7 +1,7 @@
 import Head from "next/head";
-import type { AppType } from "next/app";
+import type { AppType, AppProps } from "next/app";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, ClerkLoaded } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 import AppBar from "~/components/AppBar";
 import MainLayout from "~/components/PageLayout";
@@ -20,7 +20,7 @@ const AppContainer = styled.div<AppContainerProps>`
   flex-direction: ${({ $ismobile }) => ($ismobile ? "column" : "row")};
 `;
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -33,10 +33,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       </Head>
       <Toaster position="bottom-center" />
       <AppContainer $ismobile={isMobile}>
-        <AppBar />
-        <MainLayout>
-          <Component {...pageProps} />
-        </MainLayout>
+        <ClerkLoaded>
+          <AppBar />
+          <MainLayout>
+            <Component {...pageProps} />
+          </MainLayout>
+        </ClerkLoaded>
       </AppContainer>
     </ClerkProvider>
   );

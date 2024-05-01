@@ -7,9 +7,10 @@ import SingleInvoiceHeader from "./invoices/SingleInvoiceHeader";
 import InvoiceCardContent from "./invoices/InvoiceCardContent";
 import InvoiceTable from "./invoices/InvoiceTable";
 
-type Invoice = RouterOutputs["invoice"]["getById"];
+type InvoiceWithId = RouterOutputs["invoice"]["getById"];
 
-export const InvoiceView: React.FC<Invoice> = (invoice) => {
+export const InvoiceView: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
+  const { invoice } = props;
   const updateStatusMutation = api.invoice.updateStatus.useMutation();
 
   const handleStatusToggle = () => {
@@ -35,14 +36,14 @@ export const InvoiceView: React.FC<Invoice> = (invoice) => {
       {invoice && (
         <>
           <SingleInvoiceHeader
-            status={invoice.status?.toString() as "Paid" | "Pending"}
+            status={invoice.status.toString() as "Paid" | "Pending"}
             onBack={() => window.history.back()}
             onStatusChange={handleStatusToggle}
           />
           <StyledCard>
-            <InvoiceCardContent {...invoice} />
+            <InvoiceCardContent {...props} />
             <TableWrapper>
-              <InvoiceTable {...invoice} />
+              <InvoiceTable {...props} />
             </TableWrapper>
           </StyledCard>
         </>

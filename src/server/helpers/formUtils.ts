@@ -14,7 +14,13 @@ export interface FormValues {
   distributorId: string;
   dateGenerated: string;
   paymentTerms: number;
-  items: { id: string; name: string; price: number; quantity: number }[];
+  items: {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    total: number;
+  }[];
 }
 
 // export interface InvoiceFormValues {
@@ -61,7 +67,9 @@ export const initialFormValues: FormValues = {
   postalCode: "",
   dateGenerated: "",
   paymentTerms: 30,
-  items: [{ id: `temp-${Date.now()}`, name: "", quantity: 0, price: 0 }],
+  items: [
+    { id: `temp-${Date.now()}`, name: "", quantity: 0, price: 0, total: 0 },
+  ],
 };
 
 export const ValidationSchema = z.object({

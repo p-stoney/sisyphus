@@ -4,14 +4,21 @@ import { Table } from "../common/Table";
 import { TableBody, TableCell, TableRow, TableHead } from "@mui/material";
 import { calculateTotalAmount } from "~/server/helpers/invoiceUtils";
 
-type Invoice = RouterOutputs["invoice"]["getById"];
+type InvoiceWithId = RouterOutputs["invoice"]["getById"];
 
-const InvoiceTable: React.FC<Invoice> = (invoice) => {
-  const { items } = invoice;
+const InvoiceTable: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
+  const { invoiceItems, amountDue } = props;
+
+  if (!invoiceItems) {
+    return null;
+  }
+
+  const items = invoiceItems[0]?.items;
 
   if (!items) {
     return null;
   }
+
   return (
     <Table>
       <TableHead>
@@ -40,25 +47,25 @@ const InvoiceTable: React.FC<Invoice> = (invoice) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {items.items.map((item, index) => (
+        {items.map((item, index) => (
           <TableRow key={index}>
             <TableCell
               align="left"
               sx={{ borderBottom: "none", color: "#69635e" }}
             >
-              {items.items[index]?.name}
+              {item.name}
             </TableCell>
             <TableCell
               align="left"
               sx={{ borderBottom: "none", color: "#69635e" }}
             >
-              {items.items[index]?.quantity}
+              {item.quantity}
             </TableCell>
             <TableCell
               align="left"
               sx={{ borderBottom: "none", color: "#69635e" }}
             >
-              ${item.price.toFixed(2)}
+              ${Number(item.price).toFixed(2)}
             </TableCell>
             <TableCell
               align="right"
@@ -76,7 +83,7 @@ const InvoiceTable: React.FC<Invoice> = (invoice) => {
             Amount Due
           </TableCell>
           <TableCell align="right" sx={{ color: "white", fontSize: "1.5rem" }}>
-            ${invoice.amountDue.toFixed(2)}
+            ${amountDue.toFixed(2)}
           </TableCell>
         </TableRow>
       </TableBody>

@@ -1,13 +1,10 @@
-import { type PrismaClient } from "@prisma/client";
+import type { Context } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { type GetByIdDTO } from "../validators";
 
 type GetByIdOptions = {
   input: GetByIdDTO;
-  ctx: {
-    db: PrismaClient;
-    userId: string;
-  };
+  ctx: Context;
 };
 
 export const getById = async ({ input, ctx }: GetByIdOptions) => {

@@ -1,4 +1,4 @@
-import { adminProcedure, createTRPCRouter, privateProcedure } from "../../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import {
   GetByIdSchema,
   GetByDistributorIdSchema,
@@ -14,21 +14,21 @@ import {
 } from "./procedures";
 
 export const invoiceRouter = createTRPCRouter({
-  getAll: privateProcedure.query(async ({ ctx }) => getAll({ ctx })),
+  getAll: protectedProcedure.query(async ({ ctx }) => getAll({ ctx })),
 
-  getById: privateProcedure
+  getById: protectedProcedure
     .input(GetByIdSchema)
     .query(async ({ input, ctx }) => getById({ input, ctx })),
 
-  getByDistributorId: privateProcedure
+  getByDistributorId: protectedProcedure
     .input(GetByDistributorIdSchema)
     .query(async ({ input, ctx }) => getByDistributorId({ input, ctx })),
 
-  createInvoice: adminProcedure
+  createInvoice: protectedProcedure
     .input(CreateInvoiceSchema)
     .mutation(async ({ input, ctx }) => createInvoice({ input, ctx })),
 
-  updateStatus: privateProcedure
+  updateStatus: protectedProcedure
     .input(UpdateInvoiceSchema)
     .mutation(async ({ input, ctx }) => updateStatus({ input, ctx })),
 });

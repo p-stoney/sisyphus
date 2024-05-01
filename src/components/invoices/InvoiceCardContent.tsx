@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { api, type RouterOutputs } from "~/utils/api";
+// import type { Invoice } from "@prisma/client";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import { TRPCError } from "@trpc/server";
@@ -9,26 +10,28 @@ import { RightCaret } from "../common/RightCaret";
 import { Typography, Grid, Box } from "@mui/material";
 import { HeaderTypography, EmphasizedTypography } from "../common/Typography";
 
-type Invoice = RouterOutputs["invoice"]["getById"];
+type InvoiceWithId = RouterOutputs["invoice"]["getById"];
 
-const InvoiceCardContent: React.FC<Invoice> = (invoice) => {
+const InvoiceCardContent: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
+  const { invoice } = props;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { id, distributorId } = invoice;
 
-  if (!id) {
+  if (!invoice.id) {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: "Invoice not found",
     });
   }
 
-  if (!distributorId) {
+  if (!invoice.distributorId) {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: "Distributor not found",
     });
   }
+
+  const distributorId = invoice.distributorId;
 
   const { ...distributor } = api.distributor.getById.useQuery({
     distributorId,
@@ -86,10 +89,10 @@ const InvoiceCardContent: React.FC<Invoice> = (invoice) => {
                 }}
               >
                 <EmphasizedTypography>
-                  #{(invoice.createdAt as Date)?.toString()}
+                  #{invoice.createdAt.toString()}
                 </EmphasizedTypography>
                 <EmphasizedTypography>
-                  {invoice.dueBy?.toString()}
+                  {invoice.dueBy.toString()}
                 </EmphasizedTypography>
               </Grid>
               <Grid
@@ -114,7 +117,7 @@ const InvoiceCardContent: React.FC<Invoice> = (invoice) => {
                   <EmphasizedTypography>
                     {distributor.data?.name}
                   </EmphasizedTypography>
-                  <Link href={`/invoice/${distributor.data?.id}`} passHref>
+                  <Link href={`/distributor/${distributor.data?.id}`} passHref>
                     <RightCaret alt="Go to details" />
                   </Link>
                 </Box>
@@ -154,13 +157,13 @@ const InvoiceCardContent: React.FC<Invoice> = (invoice) => {
               <Grid item xs={12} sm={4}>
                 <HeaderTypography>Invoice Date</HeaderTypography>
                 <EmphasizedTypography>
-                  {(invoice.createdAt as Date)?.toString()}
+                  {invoice.createdAt.toString()}
                 </EmphasizedTypography>
                 <HeaderTypography sx={{ marginTop: "1rem" }}>
                   Payment Due
                 </HeaderTypography>
                 <EmphasizedTypography>
-                  {invoice.dueBy?.toString()}
+                  {invoice.dueBy.toString()}
                 </EmphasizedTypography>
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -175,7 +178,7 @@ const InvoiceCardContent: React.FC<Invoice> = (invoice) => {
                   <EmphasizedTypography>
                     {distributor.data?.name}
                   </EmphasizedTypography>
-                  <Link href={`/invoice/${distributor.data?.id}`} passHref>
+                  <Link href={`/distributors/${distributor.data?.id}`} passHref>
                     <RightCaret alt="Go to details" />
                   </Link>
                 </Box>
