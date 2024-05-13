@@ -5,13 +5,15 @@ import {
   CreateDistributorSchema,
   DeleteDistributorSchema,
 } from "./validators";
-import {
-  getAll,
-  getById,
-  createDistributor,
-  deleteDistributor,
-} from "./procedures";
+import { getAll, getById, create, remove } from "./procedures";
 
+/**
+ * Creates the router for distributor-related endpoints.
+ * Utilizes protectedProcedure to ensure these operations are only accessible when authenticated.
+ * Each route validates input against predefined Zod schemas and delegates processing to specific procedures.
+ *
+ * @module DistributorRouter
+ */
 export const distributorRouter = createTRPCRouter({
   getAll: protectedProcedure
     .input(GetAllSchema)
@@ -21,11 +23,11 @@ export const distributorRouter = createTRPCRouter({
     .input(GetByIdSchema)
     .query(async ({ input, ctx }) => getById({ input, ctx })),
 
-  createDistributor: protectedProcedure
+  create: protectedProcedure
     .input(CreateDistributorSchema)
-    .mutation(async ({ input, ctx }) => createDistributor({ input, ctx })),
+    .mutation(async ({ input, ctx }) => create({ input, ctx })),
 
-  deleteDistributor: protectedProcedure
+  remove: protectedProcedure
     .input(DeleteDistributorSchema)
-    .mutation(async ({ input, ctx }) => deleteDistributor({ input, ctx })),
+    .mutation(async ({ input, ctx }) => remove({ input, ctx })),
 });

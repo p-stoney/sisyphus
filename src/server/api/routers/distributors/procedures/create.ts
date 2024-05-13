@@ -10,10 +10,19 @@ type CreateDistributorOptions = {
   };
 };
 
-export const createDistributor = async ({
-  input,
-  ctx,
-}: CreateDistributorOptions) => {
+/**
+ * Creates a new distributor and associates it with a business.
+ *
+ * @param {Object} options - The options for creating the distributor.
+ * @param {CreateDistributorDTO} options.input - The input data for the new distributor.
+ * @param {PrismaClient} options.ctx.db - The Prisma client instance.
+ * @param {string} options.ctx.userId - The ID of the current user.
+ *
+ * @returns {Promise<Object>} The created distributor.
+ *
+ * @throws {TRPCError} If a distributor with the same name already exists or if an error occurs during creation.
+ */
+export const create = async ({ input, ctx }: CreateDistributorOptions) => {
   const { db } = ctx;
   const { businessId, ...distributorData } = input;
 

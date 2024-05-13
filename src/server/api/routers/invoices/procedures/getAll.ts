@@ -7,6 +7,17 @@ type GetAllOptions = {
   ctx: Context;
 };
 
+/**
+ * Retrieves all invoices for a user.
+ *
+ * @param {Object} options - The options for retrieving the invoices.
+ * @param {GetAllDTO} options.input - The input data for retrieving the invoices.
+ * @param {Context} options.ctx - The context object containing the Prisma client instance and user ID.
+ *
+ * @returns {Promise<Array<Object>>} A list of enriched invoices with the total amount due and payment status.
+ *
+ * @throws {TRPCError} If no invoices are found for the user.
+ */
 export const getAll = async ({ input, ctx }: GetAllOptions) => {
   const { userId } = input;
 

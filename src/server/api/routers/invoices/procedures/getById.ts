@@ -11,6 +11,18 @@ type GetByIdOptions = {
   };
 };
 
+/**
+ * Retrieves an invoice by its ID.
+ *
+ * @param {Object} options - The options for retrieving the invoice.
+ * @param {GetByIdDTO} options.input - The input data for retrieving the invoice.
+ * @param {PrismaClient} options.ctx.db - The Prisma client instance.
+ * @param {string} options.ctx.userId - The ID of the current user.
+ *
+ * @returns {Promise<ExtendedInvoice>} The retrieved invoice with its items and the total amount due.
+ *
+ * @throws {TRPCError} If the invoice is not found.
+ */
 export const getById = async ({ input, ctx }: GetByIdOptions) => {
   const { invoiceId } = input;
 

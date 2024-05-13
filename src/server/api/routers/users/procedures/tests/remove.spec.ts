@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { TRPCError } from "@trpc/server";
 import { testdb, createContextInner } from "~/tests/testSetup";
-import { deleteUser } from "../deleteUser";
+import { remove } from "../remove";
 
 describe("deleteUser procedure", () => {
   it("successfully deletes a user", async () => {
@@ -32,7 +32,7 @@ describe("deleteUser procedure", () => {
       deletedAt: new Date(),
     });
 
-    const result = await deleteUser({
+    const result = await remove({
       input: deleteUserInput,
       ctx,
     });
@@ -57,14 +57,14 @@ describe("deleteUser procedure", () => {
     testdb.user.findUnique.mockResolvedValue(null);
 
     await expect(
-      deleteUser({
+      remove({
         input: deleteUserInput,
         ctx,
       }),
     ).rejects.toThrow(TRPCError);
 
     await expect(
-      deleteUser({
+      remove({
         input: deleteUserInput,
         ctx,
       }),

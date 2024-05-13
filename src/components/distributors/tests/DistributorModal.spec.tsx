@@ -17,7 +17,7 @@ vi.mock("~/utils/api", () => ({
       },
     },
     distributor: {
-      createDistributor: {
+      create: {
         useMutation: vi.fn(),
       },
     },
@@ -39,7 +39,7 @@ describe("DistributorModal Component", () => {
       isLoading: false,
     });
 
-    api.distributor.createDistributor.useMutation.mockReturnValue({
+    api.distributor.create.useMutation.mockReturnValue({
       mutateAsync: vi.fn().mockResolvedValue({}),
     });
   });

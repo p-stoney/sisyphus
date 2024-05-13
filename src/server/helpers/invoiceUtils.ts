@@ -1,9 +1,10 @@
-import type { InvoiceItem } from "@prisma/client";
-
-export const calculateInvoiceAmount = (items: InvoiceItem[]): number => {
-  return items.reduce((acc, item) => acc + item.quantity, 0);
-};
-
+/**
+ * Calculates the payment due date based on the generated date and payment terms.
+ *
+ * @param {string} dateGenerated - The date the invoice was generated.
+ * @param {number} paymentTerms - The number of days for payment terms.
+ * @returns {string} The payment due date in YYYY-MM-DD format.
+ */
 export const calculatePaymentDueDate = (
   dateGenerated: string,
   paymentTerms: number,
@@ -13,6 +14,12 @@ export const calculatePaymentDueDate = (
   return date.toISOString().split("T")[0] as string;
 };
 
+/**
+ * Calculates the total amount for an array of items based on their price and quantity.
+ *
+ * @param {Array<{ price: number; quantity: number }>} items - The items with their prices and quantities.
+ * @returns {number} The total amount.
+ */
 export const calculateTotalAmount = (
   items: Array<{ price: number; quantity: number }>,
 ): number => {

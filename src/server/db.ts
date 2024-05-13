@@ -1,6 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { env } from "../env";
 
+/**
+ * Prisma client instance for database operations.
+ * @type {PrismaClient}
+ */
 const createPrismaClient = () =>
   new PrismaClient({
     log:

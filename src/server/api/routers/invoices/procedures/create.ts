@@ -10,7 +10,19 @@ type CreateInvoiceOptions = {
   };
 };
 
-export const createInvoice = async ({ input, ctx }: CreateInvoiceOptions) => {
+/**
+ * Creates a new invoice in the database.
+ *
+ * @param {Object} options - The options for creating the invoice.
+ * @param {CreateInvoiceDTO} options.input - The input data for creating the invoice.
+ * @param {PrismaClient} options.ctx.db - The Prisma client instance.
+ * @param {string} options.ctx.userId - The ID of the current user.
+ *
+ * @returns {Promise<Object>} The created invoice.
+ *
+ * @throws {TRPCError} If there is an error creating the invoice, such as a unique constraint violation.
+ */
+export const create = async ({ input, ctx }: CreateInvoiceOptions) => {
   const { db } = ctx;
   const { businessId, distributorId, items, paymentTerms, dateGenerated } =
     input;

@@ -7,6 +7,17 @@ type GetBusinessIdOptions = {
   ctx: Context;
 };
 
+/**
+ * Retrieves the business ID associated with a user.
+ *
+ * @param {GetBusinessIdOptions} options - The options containing the input data and context.
+ * @param {GetBusinessDTO} options.input - The input data for getting the business ID.
+ * @param {Context} options.ctx - The context containing the Prisma client and user ID.
+ *
+ * @returns {Promise<string>} The business ID.
+ *
+ * @throws {TRPCError} If the user or business is not found.
+ */
 export const getBusinessId = async ({ input, ctx }: GetBusinessIdOptions) => {
   const { userId } = input;
 

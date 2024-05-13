@@ -8,6 +8,17 @@ type GetByIdOptions = {
   ctx: Context;
 };
 
+/**
+ * Retrieves a distributor by ID and includes extended invoice information.
+ *
+ * @param {Object} options - The options for retrieving the distributor.
+ * @param {GetByIdDTO} options.input - The input data containing the distributor ID.
+ * @param {Context} options.ctx - The context object containing the database client and user ID.
+ *
+ * @returns {Promise<ExtendedDistributor>} The distributor with extended invoice information.
+ *
+ * @throws {TRPCError} If the distributor is not found.
+ */
 export const getById = async ({ input, ctx }: GetByIdOptions) => {
   const { distributorId } = input;
 

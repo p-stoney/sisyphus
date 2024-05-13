@@ -10,10 +10,17 @@ import {
   getAll,
   getById,
   getByDistributorId,
-  createInvoice,
+  create,
   updateStatus,
 } from "./procedures";
 
+/**
+ * Creates the router for invoice-related endpoints.
+ * Utilizes protectedProcedure to ensure these operations are only accessible when authenticated.
+ * Each route validates input against predefined Zod schemas and delegates processing to specific procedures.
+ *
+ * @module InvoiceRouter
+ */
 export const invoiceRouter = createTRPCRouter({
   getAll: protectedProcedure
     .input(GetAllSchema)
@@ -27,9 +34,9 @@ export const invoiceRouter = createTRPCRouter({
     .input(GetByDistributorIdSchema)
     .query(async ({ input, ctx }) => getByDistributorId({ input, ctx })),
 
-  createInvoice: protectedProcedure
+  create: protectedProcedure
     .input(CreateInvoiceSchema)
-    .mutation(async ({ input, ctx }) => createInvoice({ input, ctx })),
+    .mutation(async ({ input, ctx }) => create({ input, ctx })),
 
   updateStatus: protectedProcedure
     .input(UpdateInvoiceSchema)

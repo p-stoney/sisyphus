@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { TRPCError } from "@trpc/server";
 import { testdb, createContextInner } from "~/tests/testSetup";
-import { deleteBusiness } from "../deleteBusiness";
+import { remove } from "../remove";
 
 describe("deleteBusiness procedure", () => {
   it("successfully deletes a business", async () => {
@@ -29,7 +29,7 @@ describe("deleteBusiness procedure", () => {
       deletedAt: new Date(),
     });
 
-    const result = await deleteBusiness({
+    const result = await remove({
       input: deleteBusinessInput,
       ctx,
     });
@@ -55,14 +55,14 @@ describe("deleteBusiness procedure", () => {
     testdb.business.findUnique.mockResolvedValue(null);
 
     await expect(
-      deleteBusiness({
+      remove({
         input: deleteBusinessInput,
         ctx,
       }),
     ).rejects.toThrow(TRPCError);
 
     await expect(
-      deleteBusiness({
+      remove({
         input: deleteBusinessInput,
         ctx,
       }),

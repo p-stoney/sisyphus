@@ -3,15 +3,22 @@ import {
   GetBusinessIdSchema,
   CreateAssociationSchema,
   RemoveAssociationSchema,
-  DeleteUserSchema,
+  RemoveUserSchema,
 } from "./validators";
 import {
   getBusinessId,
   createUserAssociation,
-  removeUserAssociation,
-  deleteUser,
+  removeAssociation,
+  remove,
 } from "./procedures";
 
+/**
+ * Creates the router for user-related endpoints.
+ * Utilizes protectedProcedure to ensure these operations are only accessible when authenticated.
+ * Each route validates input against predefined Zod schemas and delegates processing to specific procedures.
+ *
+ * @module UserRouter
+ */
 export const userRouter = createTRPCRouter({
   getBusinessId: protectedProcedure
     .input(GetBusinessIdSchema)
@@ -21,11 +28,11 @@ export const userRouter = createTRPCRouter({
     .input(CreateAssociationSchema)
     .mutation(async ({ input, ctx }) => createUserAssociation({ input, ctx })),
 
-  removeUserAssociation: protectedProcedure
+  removeAssociation: protectedProcedure
     .input(RemoveAssociationSchema)
-    .mutation(async ({ input, ctx }) => removeUserAssociation({ input, ctx })),
+    .mutation(async ({ input, ctx }) => removeAssociation({ input, ctx })),
 
-  deleteUser: protectedProcedure
-    .input(DeleteUserSchema)
-    .mutation(async ({ input, ctx }) => deleteUser({ input, ctx })),
+  remove: protectedProcedure
+    .input(RemoveUserSchema)
+    .mutation(async ({ input, ctx }) => remove({ input, ctx })),
 });

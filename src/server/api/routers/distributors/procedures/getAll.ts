@@ -7,6 +7,17 @@ type GetAllOptions = {
   ctx: Context;
 };
 
+/**
+ * Retrieves all distributors associated with a user.
+ *
+ * @param {Object} options - The options for retrieving distributors.
+ * @param {GetAllDTO} options.input - The input data containing the user ID.
+ * @param {Context} options.ctx - The context object containing the database client and user ID.
+ *
+ * @returns {Promise<Array<Object>>} An array of enriched distributor objects.
+ *
+ * @throws {TRPCError} If no distributors are found for the user.
+ */
 export const getAll = async ({ input, ctx }: GetAllOptions) => {
   const { userId } = input;
 

@@ -10,6 +10,18 @@ type UpdateStatusOptions = {
   };
 };
 
+/**
+ * Updates the status of an invoice.
+ *
+ * @param {Object} options - The options for updating the invoice status.
+ * @param {UpdateInvoiceDto} options.input - The input data containing the invoice ID and new status.
+ * @param {PrismaClient} options.ctx.db - The Prisma client instance.
+ * @param {string} options.ctx.userId - The ID of the current user.
+ *
+ * @returns {Promise<Object>} The updated invoice ID and new status.
+ *
+ * @throws {TRPCError} If the invoice is not found or the user does not have permission to update the invoice.
+ */
 export const updateStatus = async ({ input, ctx }: UpdateStatusOptions) => {
   const { invoiceId, newStatus } = input;
 

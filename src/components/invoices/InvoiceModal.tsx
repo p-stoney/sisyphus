@@ -35,7 +35,7 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
 
   const [distributorId, setDistributorId] = React.useState("");
 
-  const newInvoice = api.invoice.createInvoice.useMutation();
+  const newInvoice = api.invoice.create.useMutation();
   const { data: businessId, isLoading: isBusinessIdLoading } =
     api.user.getBusinessId.useQuery({ userId: activeId });
 

@@ -10,7 +10,20 @@ type CreateBusinessOptions = {
   };
 };
 
-export const createBusiness = async ({ input, ctx }: CreateBusinessOptions) => {
+/**
+ * Creates a new business associated with the user.
+ *
+ * @param {Object} options - The options for creating the business.
+ * @param {CreateBusinessDTO} options.input - The input data containing the business name.
+ * @param {Object} options.ctx - The context object containing the database client and user ID.
+ * @param {PrismaClient} options.ctx.db - The Prisma database client.
+ * @param {string} options.ctx.userId - The ID of the user creating the business.
+ *
+ * @returns {Promise<Object>} The created business with its ID and name.
+ *
+ * @throws {TRPCError} If a business with the same name already exists or if there is an internal server error.
+ */
+export const create = async ({ input, ctx }: CreateBusinessOptions) => {
   try {
     const business = await ctx.db.business.create({
       data: {

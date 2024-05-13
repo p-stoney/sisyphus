@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { testdb, createContextInner } from "~/tests/testSetup";
-import { createDistributor } from "../createDistributor";
+import { create } from "../create";
 
 describe("createDistributor procedure", () => {
   it("successfully creates a new distributor", async () => {
@@ -29,7 +29,7 @@ describe("createDistributor procedure", () => {
 
     testdb.distributor.create.mockResolvedValue(mockDistributor);
 
-    const result = await createDistributor({
+    const result = await create({
       input: createDistributorInput,
       ctx,
     });
@@ -67,14 +67,14 @@ describe("createDistributor procedure", () => {
     );
 
     await expect(
-      createDistributor({
+      create({
         input: createDistributorInput,
         ctx,
       }),
     ).rejects.toThrow(TRPCError);
 
     await expect(
-      createDistributor({
+      create({
         input: createDistributorInput,
         ctx,
       }),

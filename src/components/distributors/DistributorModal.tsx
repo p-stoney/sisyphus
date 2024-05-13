@@ -36,7 +36,7 @@ const DistributorModal: React.FC<DistributorModalProps> = ({
 
   const { data: businessId, isLoading: isBusinessIdLoading } =
     api.user.getBusinessId.useQuery({ userId: activeId });
-  const newDistributor = api.distributor.createDistributor.useMutation();
+  const newDistributor = api.distributor.create.useMutation();
 
   const handleSubmit = async (values: FormValues) => {
     if (!businessId) {

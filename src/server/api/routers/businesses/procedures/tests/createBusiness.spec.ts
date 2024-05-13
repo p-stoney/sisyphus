@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Prisma } from "@prisma/client";
 import { testdb, createContextInner } from "~/tests/testSetup";
-import { createBusiness } from "../createBusiness";
+import { create } from "../create";
 
 describe("createBusiness procedure", () => {
   it("successfully creates a new business", async () => {
@@ -23,7 +23,7 @@ describe("createBusiness procedure", () => {
 
     testdb.business.create.mockResolvedValue(mockBusiness);
 
-    const result = await createBusiness({
+    const result = await create({
       input: { name: mockBusiness.name },
       ctx: ctx,
     });
@@ -54,7 +54,7 @@ describe("createBusiness procedure", () => {
     );
 
     await expect(
-      createBusiness({
+      create({
         input: { name: createBusinessInput.name },
         ctx: ctx,
       }),

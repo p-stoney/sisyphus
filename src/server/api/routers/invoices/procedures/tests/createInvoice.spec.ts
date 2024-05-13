@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Prisma, type InvoiceStatus } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { testdb, createContextInner } from "~/tests/testSetup";
-import { createInvoice } from "../createInvoice";
+import { create } from "../create";
 
 describe("createInvoice procedure", () => {
   it("successfully creates a new invoice and checks key properties", async () => {
@@ -46,7 +46,7 @@ describe("createInvoice procedure", () => {
 
     testdb.invoice.create.mockResolvedValue(mockInvoice);
 
-    const result = await createInvoice({
+    const result = await create({
       input: {
         ...createInvoiceInput,
         items: createInvoiceInput.items.map((item) => ({
@@ -84,7 +84,7 @@ describe("createInvoice procedure", () => {
     );
 
     await expect(
-      createInvoice({
+      create({
         input: {
           ...createInvoiceInput,
           items: createInvoiceInput.items.map((item) => ({
@@ -97,7 +97,7 @@ describe("createInvoice procedure", () => {
     ).rejects.toThrow(TRPCError);
 
     await expect(
-      createInvoice({
+      create({
         input: {
           ...createInvoiceInput,
           items: createInvoiceInput.items.map((item) => ({

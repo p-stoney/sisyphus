@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { TRPCError } from "@trpc/server";
 import { testdb, createContextInner } from "~/tests/testSetup";
-import { deleteDistributor } from "../deleteDistributor";
+import { remove } from "../remove";
 
-describe("deleteDistributor procedure", () => {
+describe("remove procedure", () => {
   it("successfully deletes a distributor", async () => {
     const deleteDistributorInput = {
       distributorId: "dist123",
@@ -34,7 +34,7 @@ describe("deleteDistributor procedure", () => {
       deletedAt: new Date(),
     });
 
-    const result = await deleteDistributor({
+    const result = await remove({
       input: deleteDistributorInput,
       ctx,
     });
@@ -60,14 +60,14 @@ describe("deleteDistributor procedure", () => {
     testdb.distributor.findUnique.mockResolvedValue(null);
 
     await expect(
-      deleteDistributor({
+      remove({
         input: deleteDistributorInput,
         ctx,
       }),
     ).rejects.toThrow(TRPCError);
 
     await expect(
-      deleteDistributor({
+      remove({
         input: deleteDistributorInput,
         ctx,
       }),

@@ -1,6 +1,6 @@
 import { type PrismaClient } from "@prisma/client";
-import { TRPCError } from '@trpc/server';
-import { type CreateUserDTO } from '../validators';
+import { TRPCError } from "@trpc/server";
+import { type CreateUserDTO } from "../validators";
 
 type CreateAssociationOptions = {
   input: CreateUserDTO;
@@ -8,9 +8,24 @@ type CreateAssociationOptions = {
     db: PrismaClient;
     userId: string;
   };
-}
+};
 
-export const createUserAssociation = async ({ input, ctx }: CreateAssociationOptions) => {
+/**
+ * Creates an association between a user and multiple businesses.
+ *
+ * @param {CreateAssociationOptions} options - The options containing the input data and context.
+ * @param {CreateUserDTO} options.input - The input data for creating the user association.
+ * @param {PrismaClient} options.ctx.db - The Prisma client instance.
+ * @param {string} options.ctx.userId - The ID of the current user.
+ *
+ * @returns {Promise<{id: string, businesses: Array<{id: string, name: string}>, updatedAt: Date}>} The updated user with associated businesses.
+ *
+ * @throws {TRPCError} If the user or businesses are not found, or if an internal server error occurs.
+ */
+export const createUserAssociation = async ({
+  input,
+  ctx,
+}: CreateAssociationOptions) => {
   const { userId, businessIds } = input;
 
   return ctx.db.$transaction(async (transaction) => {
@@ -21,7 +36,7 @@ export const createUserAssociation = async ({ input, ctx }: CreateAssociationOpt
     });
 
     if (!user) {
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
+      throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
     }
 
     const businesses = await transaction.business.findMany({
@@ -32,8 +47,8 @@ export const createUserAssociation = async ({ input, ctx }: CreateAssociationOpt
 
     if (!businesses) {
       throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'One or more businesses not found',
+        code: "NOT_FOUND",
+        message: "One or more businesses not found",
       });
     }
 
@@ -52,7 +67,7 @@ export const createUserAssociation = async ({ input, ctx }: CreateAssociationOpt
     });
 
     if (!updatedUser) {
-      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
     }
 
     return {
@@ -61,7 +76,7 @@ export const createUserAssociation = async ({ input, ctx }: CreateAssociationOpt
         id: business.id,
         name: business.name,
       })),
-      updatedAt: updatedUser.updatedAt
+      updatedAt: updatedUser.updatedAt,
     };
   });
 };

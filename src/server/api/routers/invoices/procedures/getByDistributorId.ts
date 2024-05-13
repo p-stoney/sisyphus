@@ -10,6 +10,18 @@ type GetByDistributorIdOptions = {
   };
 };
 
+/**
+ * Retrieves invoices by distributor ID for a specific user.
+ *
+ * @param {Object} options - The options for retrieving the invoices.
+ * @param {GetByDistributorIdDTO} options.input - The input data containing the distributor ID.
+ * @param {PrismaClient} options.ctx.db - The Prisma client instance.
+ * @param {string} options.ctx.userId - The ID of the current user.
+ *
+ * @returns {Promise<Array<Object>>} A list of invoices with their items.
+ *
+ * @throws {TRPCError} If no invoices are found for the specified distributor and user.
+ */
 export const getByDistributorId = async ({
   input,
   ctx,
