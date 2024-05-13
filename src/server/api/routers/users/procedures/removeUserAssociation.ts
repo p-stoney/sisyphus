@@ -1,6 +1,6 @@
 import { type PrismaClient } from "@prisma/client";
-import { TRPCError } from '@trpc/server';
-import { type RemoveAssociationDTO } from '../validators';
+import { TRPCError } from "@trpc/server";
+import { type RemoveAssociationDTO } from "../validators";
 
 type RemoveAssociationOptions = {
   input: RemoveAssociationDTO;
@@ -8,9 +8,12 @@ type RemoveAssociationOptions = {
     db: PrismaClient;
     userId: string;
   };
-}
+};
 
-export const removeUserAssociation = async ({ input, ctx }: RemoveAssociationOptions) => {
+export const removeUserAssociation = async ({
+  input,
+  ctx,
+}: RemoveAssociationOptions) => {
   const { userId, businessId } = input;
 
   return ctx.db.$transaction(async (transaction) => {
@@ -22,19 +25,17 @@ export const removeUserAssociation = async ({ input, ctx }: RemoveAssociationOpt
     });
 
     if (!user) {
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
+      throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
     }
 
-    const currentBusinesses = user.businesses.map(
-      (business) => business.id
-    );
+    const currentBusinesses = user.businesses.map((business) => business.id);
 
     const invalidBusiness = !currentBusinesses.includes(businessId);
 
     if (invalidBusiness) {
       throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'Business selected for removal not found',
+        code: "NOT_FOUND",
+        message: "Business selected for removal not found",
       });
     }
 
@@ -53,7 +54,7 @@ export const removeUserAssociation = async ({ input, ctx }: RemoveAssociationOpt
     });
 
     if (!updatedUser) {
-      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
     }
 
     return {
@@ -66,16 +67,3 @@ export const removeUserAssociation = async ({ input, ctx }: RemoveAssociationOpt
     };
   });
 };
-
-    // const business = await transaction.business.findUnique({
-    //   where: {
-    //     id: businessId,
-    //   },
-    // });
-
-    // if (!business) {
-    //   throw new TRPCError({
-    //     code: 'NOT_FOUND',
-    //     message: 'Business not found',
-    //   });
-    // }

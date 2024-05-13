@@ -1,21 +1,9 @@
-/* eslint-disable @typescript-eslint/require-await */
 import { initTRPC, TRPCError } from "@trpc/server";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
-// import type { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { ZodError } from "zod";
 import superjson from "superjson";
 import { db } from "../db";
-// import { testdb } from "~/tests/testSetup";
-
-// export const createContextInner = ({ userId }: { userId: string }) => {
-//   return {
-//     db: testdb,
-//     userId,
-//   };
-// };
-
-// export type ContextInner = Awaited<ReturnType<typeof createContextInner>>;
 
 export const createContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;

@@ -1,6 +1,5 @@
 import { vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-// import userEvent from "@testing-library/user-event";
 import InvoiceItem from "../InvoiceItem";
 import { type InvoiceStatus } from "@prisma/client";
 import mockRouter from "next-router-mock";

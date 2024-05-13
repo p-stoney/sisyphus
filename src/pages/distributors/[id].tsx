@@ -4,8 +4,6 @@ import { api } from "~/utils/api";
 import Head from "next/head";
 import DistributorView from "~/components/distributors/DistributorView";
 
-// TODO: Maybe use RouterOutput?
-
 const SingleDistributorPage: NextPage<{ id: string }> = ({ id }) => {
   const { data, isLoading, isError } = api.distributor.getById.useQuery({
     distributorId: id,
@@ -50,42 +48,3 @@ export const getStaticPaths = () => {
 };
 
 export default SingleDistributorPage;
-
-// import { api } from "~/utils/api";
-// import type { RouterOutputs } from "~/utils/api";
-
-// export const SingleDistributorPage: NextPage<{ id: string }> = ({ id }) => {
-//   const { data } = api.distributor.getById.useQuery({
-//     distributorId: id,
-//   });
-
-//   if (!data) return <div>404</div>;
-
-//   return (
-//     <>
-//       <Head>
-//         <title>Distributor: {data.distributor.name}</title>
-//       </Head>
-//       <PageLayout>
-//         <DistributorView {...data} />
-//       </PageLayout>
-//     </>
-//   );
-// };
-
-// type Props = RouterOutputs["distributor"]["getById"];
-
-// export const DistributorDetailPage: NextPage<Props> = ({ distributor }) => {
-//   if (!distributor) return <p>Distributor not found.</p>;
-
-//   return (
-//     <>
-//       <Head>
-//         <title>Distributor: {distributor.name}</title>
-//       </Head>
-//       <PageLayout>
-//         {/* <DistributorDetails distributor={distributor} /> */}
-//       </PageLayout>
-//     </>
-//   );
-// };

@@ -16,7 +16,7 @@ export const ButtonWithProps = styled.button<ButtonProps>`
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
-  margin-right: 0.25rem; // This is the only difference
+  margin-right: 0.25rem;
   cursor: pointer;
   outline: none;
   width: ${(props) => (props.$fullWidth ? "100%" : "auto")};

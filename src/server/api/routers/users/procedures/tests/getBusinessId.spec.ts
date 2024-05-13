@@ -44,7 +44,7 @@ describe("getBusinessId procedure", () => {
 
   it("throws NOT_FOUND error when no businesses exist for the user", async () => {
     const getBusinessIdInput = {
-      userId: "user999", // A user ID with no businesses
+      userId: "user999",
     };
 
     const ctx = createContextInner({ userId: "user999" });

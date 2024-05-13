@@ -7,7 +7,6 @@
     "strict": true,
     "paths": {
       "@server/*": ["./src/*"],
-      // "@tests/*": ["./src/*"]
     }
   }
 }

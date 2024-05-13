@@ -47,23 +47,18 @@ describe("InvoiceHeader Component", () => {
   it("renders invoice filter content correctly and updates criteria", async () => {
     const { user, onFilterChange } = setup({});
 
-    // Click to open the filter dropdown
     await user.click(screen.getByText(/Filter/));
 
-    // Check presence of filter fields
     expect(screen.getByLabelText("Distributor Name:")).toBeInTheDocument();
     expect(screen.getByLabelText("Invoice ID:")).toBeInTheDocument();
 
-    // Simulate a name filter input change
     const nameInput = screen.getByLabelText("Distributor Name:");
     await user.type(nameInput, "Sample Distributor");
 
-    // Check the last call to onFilterChange to see if it has the expected value
     expect(onFilterChange).toHaveBeenLastCalledWith(
       expect.objectContaining({ name: "r" }),
     );
 
-    // Simulate checking "Paid Invoices"
     const paidCheckbox = screen.getByLabelText("Paid Invoices");
     await user.click(paidCheckbox);
 

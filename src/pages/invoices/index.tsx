@@ -8,8 +8,6 @@ import InvoiceHeader from "~/components/invoices/InvoiceHeader";
 import InvoiceItem from "~/components/invoices/InvoiceItem";
 import InvoiceModal from "~/components/invoices/InvoiceModal";
 
-// pass userID as prop here
-
 type Invoice = RouterOutputs["invoice"]["getAll"][number];
 
 const InvoicesPage = () => {

@@ -39,17 +39,17 @@ describe("DropdownFilter Component", () => {
 
   it("closes the dropdown when clicking outside", async () => {
     const { user } = setup();
-    await user.click(screen.getByText("Filter")); // Open the dropdown
+    await user.click(screen.getByText("Filter"));
     expect(screen.getByText("Filter Content")).toBeVisible();
-    await user.click(document.body); // Click outside
+    await user.click(document.body);
     expect(screen.queryByText("Filter Content")).not.toBeInTheDocument();
   });
 
   it("closes the dropdown when the Escape key is pressed", async () => {
     const { user } = setup();
-    await user.click(screen.getByText("Filter")); // Open the dropdown
+    await user.click(screen.getByText("Filter"));
     expect(screen.getByText("Filter Content")).toBeVisible();
-    await user.keyboard("{Escape}"); // Press Escape
+    await user.keyboard("{Escape}");
     expect(screen.queryByText("Filter Content")).not.toBeInTheDocument();
   });
 });

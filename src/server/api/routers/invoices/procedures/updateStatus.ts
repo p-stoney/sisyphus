@@ -47,30 +47,3 @@ export const updateStatus = async ({ input, ctx }: UpdateStatusOptions) => {
     newStatus,
   };
 };
-
-// export const updateInvoiceStatus = privateProcedure
-//   .input(z.object({
-//     invoiceId: z.string(),
-//     newStatus: z.enum(['PAID', 'UNPAID'])
-//   }))
-//   .mutation(async ({ input, ctx }) => {
-//     const { invoiceId, newStatus } = input;
-//     const { db } = ctx;
-
-//     const updatedInvoice = await db.invoice.update({
-//       where: { id: invoiceId },
-//       data: { status: newStatus },
-//       include: {
-//         items: true, // Include this if you need to re-calculate totals or similar
-//       },
-//     });
-
-//     if (!updatedInvoice) {
-//       throw new TRPCError({
-//         code: 'NOT_FOUND',
-//         message: 'Invoice not found',
-//       });
-//     }
-
-//     return updatedInvoice;
-//   });

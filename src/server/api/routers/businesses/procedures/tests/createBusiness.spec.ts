@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Prisma } from "@prisma/client";
 import { testdb, createContextInner } from "~/tests/testSetup";
-// import { createContextInner } from "~/server/api/trpc";
 import { createBusiness } from "../createBusiness";
 
 describe("createBusiness procedure", () => {

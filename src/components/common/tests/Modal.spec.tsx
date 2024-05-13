@@ -38,7 +38,6 @@ describe("CommonModal Component", () => {
 
   it("calls the onClose function when the dialog backdrop is clicked", async () => {
     const { onClose, user } = setup({ isOpen: true });
-    // Simulate clicking on the backdrop
     await user.click(document.querySelector(".MuiBackdrop-root")!);
     expect(onClose).toHaveBeenCalledTimes(1);
   });

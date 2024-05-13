@@ -29,30 +29,6 @@ export const getAll = async ({ input, ctx }: GetAllOptions) => {
     },
   });
 
-  // const distributors = await ctx.db.distributor.findMany({
-  //   where: {
-  //     businesses: {
-  //       some: {
-  //         business: {
-  //           userId: userId,
-  //         },
-  //       },
-  //     },
-  //   },
-  //   include: {
-  //     businesses: {
-  //       include: {
-  //         business: true,
-  //       },
-  //     },
-  //     invoices: {
-  //       include: {
-  //         items: true,
-  //       },
-  //     },
-  //   },
-  // });
-
   if (!distributors.length) {
     throw new TRPCError({
       code: "NOT_FOUND",

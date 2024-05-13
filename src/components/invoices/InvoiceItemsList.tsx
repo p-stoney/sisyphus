@@ -9,8 +9,6 @@ import { ButtonWithProps, PlusIcon } from "../common/Button";
 import FormItem from "../common/FormItem";
 import type { FormValues as InvoiceFormValues } from "~/server/helpers/formUtils";
 
-// TODO: Fix bad practice index mapping
-
 interface ItemsListProps {
   values: InvoiceFormValues;
   arrayHelpers: FieldArrayRenderProps;

@@ -1,4 +1,4 @@
-// TODO: Implement aesthetic loading
+// TODO: Implement where appropriate
 
 export const LoadingSpinner = (props: { size?: number }) => {
   return (

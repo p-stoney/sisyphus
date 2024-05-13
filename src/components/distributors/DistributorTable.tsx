@@ -8,8 +8,6 @@ import { StatusBadge } from "../common/StatusBadge";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
-// TODO: Extract and import table components
-
 type DistributorComputed = RouterOutputs["distributor"]["getById"];
 
 const DistributorTable: React.FC<DistributorComputed> = (

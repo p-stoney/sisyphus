@@ -34,7 +34,6 @@ describe("DistributorModal Component", () => {
     vi.clearAllMocks();
     (useAuth as Mock).mockReturnValue({ userId: mockUserId });
 
-    // Mock the API data
     api.user.getBusinessId.useQuery.mockReturnValue({
       data: mockBusinessId,
       isLoading: false,

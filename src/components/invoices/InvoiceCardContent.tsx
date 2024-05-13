@@ -63,7 +63,6 @@ const InvoiceCardContent: React.FC<InvoiceComputed> = (props) => {
         </Typography>
 
         {isMobile ? (
-          // Mobile View
           <>
             <Grid container spacing={2}>
               <Grid

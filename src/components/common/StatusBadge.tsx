@@ -46,5 +46,3 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
 }) => {
   return <CommonStatusBadge $status={$status}>{children}</CommonStatusBadge>;
 };
-
-// export default StatusBadge;

@@ -7,7 +7,7 @@ import { mockInvoices } from "~/__mocks__/mocks";
 describe("getById invoice procedure", () => {
   it("successfully retrieves an invoice by ID", async () => {
     const getByIdInput = {
-      invoiceId: "inv1", // Use an existing ID from the mock data
+      invoiceId: "inv1",
     };
 
     const mockInvoice = mockInvoices.find(

@@ -89,21 +89,3 @@ const DistributorsPage = () => {
 };
 
 export default DistributorsPage;
-
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//   const { userId } = getAuth(ctx.req);
-//   const { db } = ctx;
-
-//   if (!userId) {
-//     return {
-//       redirect: {
-//         destination: "/sign-in",
-//         permanent: false,
-//       },
-//     };
-//   }
-
-//   const user = await db.user.findUnique({ where: { id: userId } });
-
-//   return { props: { ...buildClerkProps(ctx.req), user } };
-// };

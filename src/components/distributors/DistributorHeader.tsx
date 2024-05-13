@@ -38,17 +38,6 @@ const DistributorHeader: React.FC<DistributorHeaderProps> = ({
     });
   };
 
-  // const handleCheckboxChange = (option: "allPaid" | "pending") => {
-  //   const updatedValue = option === "allPaid";
-  //   onFilterChange({
-  //     ...filterCriteria,
-  //     allInvoicesPaid:
-  //       filterCriteria.allInvoicesPaid === updatedValue
-  //         ? undefined
-  //         : updatedValue,
-  //   });
-  // };
-
   const renderDistributorFilterContent = () => (
     <>
       <div>
