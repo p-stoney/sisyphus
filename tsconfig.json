@@ -26,17 +26,21 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
-    }
+      "~/*": ["./src/*"],
+      "~tests/*": ["./tests/*"],
+    },
+    "types": ["vitest/globals"],
   },
   "include": [
     ".eslintrc.cjs",
     "next-env.d.ts",
+    "./vitest.config.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

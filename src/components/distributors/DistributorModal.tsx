@@ -1,10 +1,11 @@
 import React from "react";
+import { useAuth } from "@clerk/nextjs";
 import { Formik, Form } from "formik";
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import {
   type FormValues,
-  ValidationSchema,
+  baseValidationSchema as ValidationSchema,
   initialFormValues,
   usStates,
   paymentTermsOptions,
@@ -30,8 +31,12 @@ const DistributorModal: React.FC<DistributorModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { userId } = useAuth();
+
+  const activeId = userId as string;
+
   const { data: businessId, isLoading: isBusinessIdLoading } =
-    api.user.getBusinessId.useQuery();
+    api.user.getBusinessId.useQuery({ userId: activeId });
   const newDistributor = api.distributor.createDistributor.useMutation();
 
   const handleSubmit = async (values: FormValues) => {
@@ -55,24 +60,27 @@ const DistributorModal: React.FC<DistributorModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="New Distributor">
-      <Formik<FormValues>
+      <Formik
         initialValues={initialFormValues}
-        validationSchema={zodResolver(ValidationSchema)}
+        validationSchema={ValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, handleChange, errors, touched }) => (
+        {({ values, setFieldValue, errors, touched }) => (
           <Form>
             <DistributorInfo
               values={values}
-              handleChange={handleChange}
+              setFieldValue={setFieldValue}
               distributors={[]}
               usStates={usStates}
               errors={errors}
               touched={touched}
+              isDropdown={false}
             />
             <PaymentTermsField
               paymentTerms={values.paymentTerms}
-              setPaymentTerms={(value) => handleChange("paymentTerms")(value)}
+              setPaymentTerms={(value) =>
+                setFieldValue("paymentTerms", Number(value), false)
+              }
               paymentTermsOptions={paymentTermsOptions}
             />
             <ModalButton type="submit">Save Distributor</ModalButton>

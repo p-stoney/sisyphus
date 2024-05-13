@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { api, type RouterOutputs } from "~/utils/api";
-// import type { Invoice } from "@prisma/client";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import { TRPCError } from "@trpc/server";
@@ -10,10 +9,11 @@ import { RightCaret } from "../common/RightCaret";
 import { Typography, Grid, Box } from "@mui/material";
 import { HeaderTypography, EmphasizedTypography } from "../common/Typography";
 
-type InvoiceWithId = RouterOutputs["invoice"]["getById"];
+type InvoiceComputed = RouterOutputs["invoice"]["getById"];
 
-const InvoiceCardContent: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
-  const { invoice } = props;
+const InvoiceCardContent: React.FC<InvoiceComputed> = (props) => {
+  const { ...invoice } = props;
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -31,11 +31,18 @@ const InvoiceCardContent: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
     });
   }
 
-  const distributorId = invoice.distributorId;
+  const { distributorId } = invoice;
 
-  const { ...distributor } = api.distributor.getById.useQuery({
+  const { data } = api.distributor.getById.useQuery({
     distributorId,
   });
+
+  if (!data) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Distributor not found",
+    });
+  }
 
   return (
     <CardContent>
@@ -114,17 +121,15 @@ const InvoiceCardContent: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
                     justifyContent: "flex-start",
                   }}
                 >
-                  <EmphasizedTypography>
-                    {distributor.data?.name}
-                  </EmphasizedTypography>
-                  <Link href={`/distributor/${distributor.data?.id}`} passHref>
+                  <EmphasizedTypography>{data.name}</EmphasizedTypography>
+                  <Link href={`/distributor/${data.id}`} passHref>
                     <RightCaret alt="Go to details" />
                   </Link>
                 </Box>
-                <div>{distributor.data?.address}</div>
-                <div>{distributor.data?.city}</div>
-                <div>{distributor.data?.state}</div>
-                <div>{distributor.data?.postalCode}</div>
+                <div>{data.address}</div>
+                <div>{data.city}</div>
+                <div>{data.state}</div>
+                <div>{data.postalCode}</div>
               </Grid>
               <Grid
                 item
@@ -138,9 +143,7 @@ const InvoiceCardContent: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
                 }}
               >
                 <HeaderTypography>Send To</HeaderTypography>
-                <EmphasizedTypography>
-                  {distributor.data?.email}
-                </EmphasizedTypography>
+                <EmphasizedTypography>{data.email}</EmphasizedTypography>
               </Grid>
             </Grid>
           </>
@@ -175,23 +178,19 @@ const InvoiceCardContent: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
                     justifyContent: "flex-start",
                   }}
                 >
-                  <EmphasizedTypography>
-                    {distributor.data?.name}
-                  </EmphasizedTypography>
-                  <Link href={`/distributors/${distributor.data?.id}`} passHref>
+                  <EmphasizedTypography>{data.name}</EmphasizedTypography>
+                  <Link href={`/distributors/${data.id}`} passHref>
                     <RightCaret alt="Go to details" />
                   </Link>
                 </Box>
-                <div>{distributor.data?.address}</div>
-                <div>{distributor.data?.city}</div>
-                <div>{distributor.data?.state}</div>
-                <div>{distributor.data?.postalCode}</div>
+                <div>{data.address}</div>
+                <div>{data.city}</div>
+                <div>{data.state}</div>
+                <div>{data.postalCode}</div>
               </Grid>
               <Grid item xs={12} sm={4} sx={{ overflowWrap: "anywhere" }}>
                 <HeaderTypography>Send To</HeaderTypography>
-                <EmphasizedTypography>
-                  {distributor.data?.email}
-                </EmphasizedTypography>
+                <EmphasizedTypography>{data.email}</EmphasizedTypography>
               </Grid>
             </Grid>
           </>

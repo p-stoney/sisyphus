@@ -60,7 +60,7 @@ const AmountDue = styled.div`
 interface InvoiceItemProps {
   id: string;
   paymentDueDate: string;
-  distributorName: string;
+  name: string;
   amountDue: number;
   status: "PAID" | "UNPAID";
 }
@@ -68,16 +68,16 @@ interface InvoiceItemProps {
 const InvoiceItem: React.FC<InvoiceItemProps> = ({
   id,
   paymentDueDate,
-  distributorName,
+  name,
   amountDue,
   status,
 }) => {
   const displayAmount = status === "PAID" ? 0 : amountDue.toFixed(2);
 
   return (
-    <Link href={`/invoices/${id}`} passHref>
+    <Link href={`/invoices/${id}`} passHref aria-label="Go to details">
       <InvoiceContainer>
-        <DistributorName>{distributorName}</DistributorName>
+        <DistributorName>{name}</DistributorName>
         <Id>#{id}</Id>
         <PaymentDue>Due {paymentDueDate}</PaymentDue>
         <AmountDue>${displayAmount}</AmountDue>

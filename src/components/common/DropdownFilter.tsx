@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import rightCaretIcon from "../../assets/right-caret.svg";
 
 export interface FilterOption {
   label: string;
@@ -8,9 +7,8 @@ export interface FilterOption {
 }
 
 export interface FilterCriteria {
-  paid?: boolean;
-  pending?: boolean;
-  distributorName?: string;
+  status?: "PAID" | "UNPAID" | null;
+  name?: string;
   id?: string;
   allInvoicesPaid?: boolean;
 }
@@ -143,7 +141,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
       <DropdownButton onClick={toggleDropdown}>
         {dropdownLabel}
         <CaretIcon
-          src={rightCaretIcon as string}
+          src={"/right-caret.svg"}
           style={{
             transform: `rotate(${isDropdownOpen ? "-90deg" : "90deg"})`,
           }}

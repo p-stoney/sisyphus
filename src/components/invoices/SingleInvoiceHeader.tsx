@@ -5,7 +5,7 @@ import { StyledBackButton, ToggleButton, XIcon } from "../common/Button";
 import { Header, HeaderContent } from "../common/Header";
 
 interface InvoiceDetailHeaderProps {
-  status: "Paid" | "Pending";
+  status: "PAID" | "UNPAID";
   onBack: () => void;
   onStatusChange: () => void;
 }
@@ -25,7 +25,7 @@ const SingleInvoiceHeader: React.FC<InvoiceDetailHeaderProps> = ({
         </StyledBackButton>
         <ToggleButton $status={status} onClick={onStatusChange}>
           <XIcon $status={status}>X</XIcon>
-          {status === "Paid" ? "Mark as Pending" : "Mark as Paid"}
+          {status === "PAID" ? "Mark as Pending" : "Mark as Paid"}
         </ToggleButton>
       </HeaderContent>
     </Header>

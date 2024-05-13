@@ -9,26 +9,36 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import type { FormValues } from "~/server/helpers/formUtils";
 
 interface FormItemProps {
   item: {
-    id: string;
     name: string;
     quantity: number;
     price: number;
     total: number;
   };
+  index: number;
   handleRemove: () => void;
-  handleChange: (field: string, value: string | number) => void;
-  errors: FormikErrors<FormValues>;
-  touched: FormikTouched<FormValues>;
+  setFieldValue: (field: string, value: string | number) => void;
+  errors: FormikErrors<{
+    name: string;
+    quantity: number;
+    price: number;
+    total: number;
+  }>;
+  touched: FormikTouched<{
+    name: string;
+    quantity: number;
+    price: number;
+    total: number;
+  }>;
 }
 
 const FormItem: React.FC<FormItemProps> = ({
   item,
+  index,
   handleRemove,
-  handleChange,
+  setFieldValue,
   errors,
   touched,
 }) => {
@@ -41,10 +51,10 @@ const FormItem: React.FC<FormItemProps> = ({
 
   const nameError = errors.name;
   const nameTouched = touched.name;
-  const quantityError = errors.items?.[Number(item.id)];
-  const quantityTouched = touched.items?.[Number(item.id)];
-  const priceError = errors.items?.[Number(item.id)];
-  const priceTouched = touched.items?.[Number(item.id)];
+  const quantityError = errors.quantity;
+  const quantityTouched = touched.quantity;
+  const priceError = errors.price;
+  const priceTouched = touched.price;
 
   const { quantity, price } = item;
 
@@ -57,7 +67,7 @@ const FormItem: React.FC<FormItemProps> = ({
 
     let fieldName = name;
     if (name === "itemQuantity" || name === "itemPrice") {
-      fieldName = `items[${item.id}].${name.split("item")[1]!.toLowerCase()}`;
+      fieldName = `items[${index}].${name.split("item")[1]!.toLowerCase()}`;
     }
 
     let newValue;
@@ -67,8 +77,10 @@ const FormItem: React.FC<FormItemProps> = ({
     } else {
       newValue = value;
     }
-
-    handleChange(fieldName, newValue);
+    console.log(
+      `Setting field '${fieldName}' to value '${newValue}' for index ${index}`,
+    );
+    setFieldValue(fieldName, newValue);
   };
 
   return (
@@ -80,56 +92,61 @@ const FormItem: React.FC<FormItemProps> = ({
       sx={{ justifyContent: isLargeScreen ? "flex-start" : "center" }}
     >
       <Grid item xs={12} md={5}>
-        <InputLabel htmlFor={`itemName-${item.name}`}>Item Name</InputLabel>
+        <InputLabel htmlFor={`itemName-${index}`}>Item Name</InputLabel>
         <TextField
           fullWidth
-          id={`itemName-${item.id}`}
-          name={`items[${item.id}].name`}
+          id={`itemName-${index}`}
+          name={`items[${index}].name`}
           value={item.name}
           type="text"
           onChange={handleInputChange}
           error={nameTouched && Boolean(nameError)}
           helperText={nameTouched && nameError}
+          aria-label={`itemName-${index}`}
         />
       </Grid>
       <Grid item xs={isMobile ? 3 : 6} md={2}>
-        <InputLabel htmlFor={`itemQty-${item.quantity}`}>Qty.</InputLabel>
+        <InputLabel htmlFor={`itemQty-${index}`}>Qty.</InputLabel>
         <TextField
           fullWidth
-          id={`itemQty-${item.id}`}
-          name={`items[${item.id}].quantity`}
+          id={`itemQty-${index}`}
+          name={`items[${index}].quantity`}
           value={item.quantity}
           type="number"
           onChange={handleInputChange}
           error={quantityTouched && Boolean(quantityError)}
-          helperText={quantityTouched && (quantityError?.toString() ?? "")}
+          helperText={quantityTouched && quantityError}
         />
       </Grid>
       <Grid item xs={isMobile ? 3 : 6} md={2}>
-        <InputLabel htmlFor={`itemPrice-${item.price}`}>Price</InputLabel>
+        <InputLabel htmlFor={`itemPrice-${index}`}>Price</InputLabel>
         <TextField
           fullWidth
-          id={`itemPrice-${item.id}`}
-          name={`items[${item.id}].price`}
+          id={`itemPrice-${index}`}
+          name={`items[${index}].price`}
           value={item.price}
           type="text"
           onChange={handleInputChange}
           error={priceTouched && Boolean(priceError)}
-          helperText={priceTouched && (priceError?.toString() ?? "")}
+          helperText={priceTouched && priceError}
         />
       </Grid>
       <Grid item xs={isMobile ? 4 : isMediumScreen ? 8 : 6} md={2}>
-        <InputLabel htmlFor={`total-${item.total}`}>Total</InputLabel>
+        <InputLabel htmlFor={`total-${index}`}>Total</InputLabel>
         <TextField
           fullWidth
-          id={`total-${item.id}`}
+          id={`total-${index}`}
           value={calculateTotal()}
           disabled
         />
       </Grid>
       <Grid item xs={isMobile ? 1 : isMediumScreen ? 1 : 2} md={1}>
         <IconButton
-          onClick={() => handleRemove()}
+          onClick={() => {
+            console.log(`Removing item at index ${index}`);
+            handleRemove();
+          }}
+          aria-label={`remove-item-${index}`}
           sx={{
             paddingTop: "2.2rem",
             paddingRight: isMobile ? "1.5rem" : "initial",
@@ -137,7 +154,7 @@ const FormItem: React.FC<FormItemProps> = ({
             alignItems: "center",
           }}
         >
-          <DeleteIcon data-testid="delete-icon" />
+          <DeleteIcon />
         </IconButton>
       </Grid>
     </Grid>

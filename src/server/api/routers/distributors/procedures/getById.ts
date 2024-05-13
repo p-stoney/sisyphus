@@ -1,6 +1,7 @@
 import type { Context } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { type GetByIdDTO } from "../validators";
+import type { ExtendedDistributor, ExtendedInvoice } from "~/types";
 
 type GetByIdOptions = {
   input: GetByIdDTO;
@@ -30,25 +31,17 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
     });
   }
 
+  const extendedInvoices = distributor.invoices.map((invoice) => ({
+    ...invoice,
+    invoiceItems: invoice.items,
+    amountDue: invoice.items.reduce(
+      (sum, item) => sum + item.price.toNumber() * item.quantity,
+      0,
+    ),
+  })) as ExtendedInvoice[];
+
   return {
     ...distributor,
-    id: distributor.id,
-    name: distributor.name,
-    email: distributor.email,
-    address: distributor.address,
-    city: distributor.city,
-    state: distributor.state,
-    postalCode: distributor.postalCode,
-    paymentTerms: distributor.paymentTerms,
-    invoices: distributor.invoices.map((invoice) => ({
-      id: invoice.id,
-      dueBy: invoice.dueBy,
-      status: invoice.status,
-      items: invoice.items,
-      amountDue: invoice.items.reduce(
-        (sum, item) => sum + item.price.toNumber() * item.quantity,
-        0,
-      ),
-    })),
-  };
+    invoices: extendedInvoices,
+  } as ExtendedDistributor;
 };

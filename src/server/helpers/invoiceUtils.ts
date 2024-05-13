@@ -10,7 +10,7 @@ export const calculatePaymentDueDate = (
 ): string => {
   const date = new Date(dateGenerated);
   date.setDate(date.getDate() + paymentTerms);
-  return (date.toISOString().split("T")[0] as string);
+  return date.toISOString().split("T")[0] as string;
 };
 
 export const calculateTotalAmount = (
@@ -18,11 +18,3 @@ export const calculateTotalAmount = (
 ): number => {
   return items.reduce((total, item) => total + item.price * item.quantity, 0);
 };
-
-// import type { Invoice } from "@prisma/client";
-
-// export const calculateTotalUnpaid = (invoices: Invoice[]) => {
-//   return invoices
-//     .filter((invoice) => invoice.status === "UNPAID")
-//     .reduce((acc, invoice) => acc + invoice.amountDue, 0);
-// };

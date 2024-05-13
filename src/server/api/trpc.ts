@@ -6,45 +6,16 @@ import { getAuth } from "@clerk/nextjs/server";
 import { ZodError } from "zod";
 import superjson from "superjson";
 import { db } from "../db";
+// import { testdb } from "~/tests/testSetup";
 
-// Awaited<ReturnType<typeof getAuth>>
-
-// export default async function handler(req: NextApiRequest) {
-//   const userId = getAuth(req);
-
+// export const createContextInner = ({ userId }: { userId: string }) => {
 //   return {
-//     userId,
-//   };
-// }
-
-// interface CreateInnerContextOptions extends Partial<CreateNextContextOptions> {
-//   userId: ReturnType<typeof handler>;
-// }
-
-// export async function createContextInner: CreateInnerContextOptions {
-//   return {
-//     db,
-//     userId,
-//   };
-// }
-
-// export const createContextInner = async ({ userId }: { userId: string }) => {
-//   return {
-//     db,
+//     db: testdb,
 //     userId,
 //   };
 // };
 
-// export async function createContext(opts: CreateNextContextOptions) {
-//   const auth = getAuth(opts.req);
-//   const contextInner = await createContextInner({ auth });
-
-//   return {
-//     ...contextInner,
-//     req: opts.req,
-//     res: opts.res,
-//   };
-// }
+// export type ContextInner = Awaited<ReturnType<typeof createContextInner>>;
 
 export const createContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;
@@ -76,8 +47,37 @@ export const t = initTRPC.context<Context>().create({
 
 const isAuthed = t.middleware(({ next, ctx }) => {
   if (!ctx.userId) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Authentication required",
+    });
   }
+  return next({
+    ctx: {
+      userId: ctx.userId,
+    },
+  });
+});
+
+const isAdmin = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.userId) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  }
+
+  const user = await db.user.findUnique({
+    where: {
+      id: ctx.userId,
+    },
+  });
+
+  if (!user || !user.role || user.role != "admin") {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+    });
+  }
+
   return next({
     ctx: {
       userId: ctx.userId,
@@ -88,3 +88,4 @@ const isAuthed = t.middleware(({ next, ctx }) => {
 export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(isAuthed);
+export const adminProcedure = t.procedure.use(isAdmin);

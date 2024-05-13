@@ -28,49 +28,55 @@ const DistributorHeader: React.FC<DistributorHeaderProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleCheckboxChange = (option: "allPaid" | "pending") => {
-    const updatedValue = option === "allPaid";
+  const handleCheckboxChange = (value: string) => {
+    const boolValue = value === "true";
+    const newValue =
+      filterCriteria.allInvoicesPaid === boolValue ? undefined : boolValue;
     onFilterChange({
       ...filterCriteria,
-      allInvoicesPaid:
-        filterCriteria.allInvoicesPaid === updatedValue
-          ? undefined
-          : updatedValue,
+      allInvoicesPaid: newValue,
     });
   };
+
+  // const handleCheckboxChange = (option: "allPaid" | "pending") => {
+  //   const updatedValue = option === "allPaid";
+  //   onFilterChange({
+  //     ...filterCriteria,
+  //     allInvoicesPaid:
+  //       filterCriteria.allInvoicesPaid === updatedValue
+  //         ? undefined
+  //         : updatedValue,
+  //   });
+  // };
 
   const renderDistributorFilterContent = () => (
     <>
       <div>
-        <label htmlFor="distributorName">Distributor Name:</label>
+        <label htmlFor="name">Distributor Name:</label>
         <InputField
           type="text"
-          id="distributorName"
-          name="distributorName"
-          value={filterCriteria.distributorName || ""}
+          id="name"
+          name="name"
+          value={filterCriteria.name || ""}
           onChange={(e) =>
             onFilterChange({
               ...filterCriteria,
-              distributorName: e.target.value,
+              name: e.target.value,
             })
           }
         />
       </div>
       <CheckboxRow>
         {filterOptions.map((option, index) => (
-          <CheckboxLabelPair key={option.value}>
+          <CheckboxLabelPair key={index}>
             <input
               type="checkbox"
               id={`checkbox-${index}`}
               name={option.value}
               checked={
-                filterCriteria.allInvoicesPaid === (option.value === "allPaid")
+                filterCriteria.allInvoicesPaid === (option.value === "true")
               }
-              onChange={() =>
-                handleCheckboxChange(
-                  option.value === "allPaid" ? "allPaid" : "pending",
-                )
-              }
+              onChange={() => handleCheckboxChange(option.value)}
             />
             <label htmlFor={`checkbox-${index}`}>{option.label}</label>
           </CheckboxLabelPair>

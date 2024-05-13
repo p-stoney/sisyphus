@@ -19,9 +19,9 @@ const CustomGridItem = styled(Grid)`
   }
 `;
 
-type Distributor = RouterOutputs["distributor"]["getById"];
+type DistributorComputed = RouterOutputs["distributor"]["getById"];
 
-const DistributorCardContent: React.FC<Distributor> = (distributor) => {
+const DistributorCardContent: React.FC<DistributorComputed> = (distributor) => {
   return (
     <CardContent>
       <Grid container spacing={2} sx={{ justifyContent: "space-around" }}>

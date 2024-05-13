@@ -1,26 +1,28 @@
+import { useAuth } from "@clerk/nextjs";
 import { useState, useMemo } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
 import type { IFilterCriteria, FilterOption } from "~/types";
-import MainContent from "~/components/common/MainContent";
+import PageContent from "~/components/common/PageContent";
 import { List } from "~/components/common/List";
 import InvoiceHeader from "~/components/invoices/InvoiceHeader";
 import InvoiceItem from "~/components/invoices/InvoiceItem";
 import InvoiceModal from "~/components/invoices/InvoiceModal";
 
+// pass userID as prop here
+
 type Invoice = RouterOutputs["invoice"]["getAll"][number];
 
 const InvoicesPage = () => {
-  const { data } = api.invoice.getAll.useQuery();
+  const { userId } = useAuth();
+
+  const activeId = userId as string;
+
+  const { data } = api.invoice.getAll.useQuery({ userId: activeId });
 
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const handleNewInvoiceClick = () => setModalOpen(true);
 
-  const [filterCriteria, setFilterCriteria] = useState<IFilterCriteria>({
-    paid: undefined,
-    pending: undefined,
-    distributorName: undefined,
-    id: undefined,
-  });
+  const [filterCriteria, setFilterCriteria] = useState<IFilterCriteria>({});
 
   const pendingInvoicesCount = data?.filter(
     (invoice) => invoice.status === "UNPAID",
@@ -31,22 +33,19 @@ const InvoicesPage = () => {
   };
 
   const filterOptions: FilterOption[] = [
-    { value: "true", label: "Paid" },
-    { value: "false", label: "Pending" },
+    { label: "Paid", value: "PAID" },
+    { label: "Pending", value: "UNPAID" },
   ];
 
   const filteredInvoices = useMemo(() => {
     return (
       data?.filter((invoice) => {
-        const matchesStatus =
-          filterCriteria.paid !== undefined
-            ? (filterCriteria.paid && invoice.status === "PAID") ||
-              (!filterCriteria.paid && invoice.status === "UNPAID")
-            : true;
-        const matchesDistributor = filterCriteria.distributorName
-          ? invoice.distributor.name
-              .toLowerCase()
-              .includes(filterCriteria.distributorName.toLowerCase())
+        const nameToLower = invoice.distributor.name.toLowerCase();
+        const filterToLower = filterCriteria.name?.toLowerCase() || "";
+
+        const matchesDistributor = nameToLower.includes(filterToLower);
+        const matchesStatus = filterCriteria.status
+          ? invoice.status === filterCriteria.status
           : true;
         const matchesId = filterCriteria.id
           ? invoice.id.includes(filterCriteria.id)
@@ -58,7 +57,7 @@ const InvoicesPage = () => {
   }, [data, filterCriteria]);
 
   return (
-    <MainContent>
+    <PageContent>
       <InvoiceHeader
         pendingInvoiceCount={pendingInvoicesCount}
         onNewInvoiceClick={handleNewInvoiceClick}
@@ -73,14 +72,14 @@ const InvoicesPage = () => {
             key={invoice.id}
             id={invoice.id}
             paymentDueDate={invoice.dueBy.toISOString().slice(0, 10)}
-            distributorName={invoice.distributor.name}
+            name={invoice.distributor.name}
             amountDue={invoice.totalDue}
             status={invoice.isPaid ? "PAID" : "UNPAID"}
           />
         )}
       />
       <InvoiceModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
-    </MainContent>
+    </PageContent>
   );
 };
 

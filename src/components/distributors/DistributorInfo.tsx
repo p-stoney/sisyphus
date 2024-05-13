@@ -1,20 +1,13 @@
 import React, { useEffect } from "react";
-import {
-  Grid,
-  InputLabel,
-  TextField,
-  Select,
-  FormControl,
-  MenuItem,
-  FormHelperText,
-} from "@mui/material";
+import { Grid, InputLabel, TextField, Select, MenuItem } from "@mui/material";
 import type { Distributor } from "@prisma/client";
 import type { FormikErrors, FormikTouched } from "formik";
 import type { FormValues } from "~/server/helpers/formUtils";
+import DistributorNameSelect from "./DistributorNameSelect";
 
 interface DistributorInfoProps {
   usStates: string[];
-  handleChange: (field: keyof FormValues, value: string | number) => void;
+  setFieldValue: (field: string, value: string) => void;
   setDistributorId?: (id: string) => void;
   values: FormValues;
   distributors: Distributor[];
@@ -25,7 +18,7 @@ interface DistributorInfoProps {
 
 const DistributorInfo: React.FC<DistributorInfoProps> = ({
   usStates,
-  handleChange,
+  setFieldValue,
   setDistributorId,
   values,
   distributors,
@@ -36,62 +29,52 @@ const DistributorInfo: React.FC<DistributorInfoProps> = ({
   const ITEM_HEIGHT = 48;
 
   useEffect(() => {
-    if (values.distributorId) {
+    if (values.distributorId && distributors.length) {
       const distributor = distributors.find(
         (d) => d.id === values.distributorId,
       );
       if (distributor) {
-        handleChange("name", distributor.name);
-        handleChange("email", distributor.email);
-        handleChange("address", distributor.address);
-        handleChange("city", distributor.city);
-        handleChange("postalCode", distributor.postalCode);
-        handleChange("state", distributor.state);
+        setFieldValue("name", distributor.name);
+        setFieldValue("email", distributor.email);
+        setFieldValue("address", distributor.address);
+        setFieldValue("city", distributor.city);
+        setFieldValue("postalCode", distributor.postalCode);
+        setFieldValue("state", distributor.state);
       }
     }
-  }, [values.distributorId, distributors, handleChange]);
+  }, [values.distributorId, distributors, setFieldValue]);
 
   return (
     <Grid container spacing={2} marginBottom=".75rem">
-      {/* Conditional Distributor Name Field */}
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth error={touched.name && Boolean(errors.name)}>
-          <InputLabel id="distributor-select-label">Distributor</InputLabel>
-          {isDropdown ? (
-            <Select
-              labelId="distributor-select-label"
-              id="distributor-select"
-              name="distributorId"
-              value={values.distributorId}
-              onChange={(e) => {
-                handleChange("distributorId", e.target.value);
-                if (setDistributorId) {
-                  setDistributorId(e.target.value);
-                }
-              }}
-              displayEmpty
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {distributors.map((distributor) => (
-                <MenuItem key={distributor.id} value={distributor.id}>
-                  {distributor.name}
-                </MenuItem>
-              ))}
-            </Select>
-          ) : (
-            <TextField
-              fullWidth
-              id="distributor-name"
-              name="name"
-              value={values.name}
-              onChange={(e) => handleChange("name", e.target.value)}
-            />
-          )}
-          <FormHelperText>{touched.name && errors.name}</FormHelperText>
-        </FormControl>
-      </Grid>
+      {/* Distributor Name Field */}
+      {isDropdown ? (
+        <DistributorNameSelect
+          labelId="distributor-id"
+          distributorId={values.distributorId}
+          onChange={(e) => {
+            setFieldValue("distributorId", e.target.value);
+            if (setDistributorId) {
+              setDistributorId(e.target.value);
+            }
+          }}
+          distributors={distributors}
+          errors={errors}
+          touched={touched}
+        />
+      ) : (
+        <Grid item xs={12} md={6}>
+          <InputLabel htmlFor="distributor-name">Distributor Name</InputLabel>
+          <TextField
+            fullWidth
+            id="distributor-name"
+            name="distributorName"
+            value={values.name}
+            onChange={(e) => setFieldValue("name", e.target.value)}
+            error={touched.name && Boolean(errors.name)}
+            helperText={touched.name && errors.name}
+          />
+        </Grid>
+      )}
       {/* Email Address Field */}
       <Grid item xs={12} md={6}>
         <InputLabel htmlFor="distributor-email">Email Address</InputLabel>
@@ -100,7 +83,7 @@ const DistributorInfo: React.FC<DistributorInfoProps> = ({
           id="distributor-email"
           name="distributorEmail"
           value={values.email}
-          onChange={(e) => handleChange("email", e.target.value)}
+          onChange={(e) => setFieldValue("email", e.target.value)}
           error={touched.email && Boolean(errors.email)}
           helperText={touched.email && errors.email}
         />
@@ -113,7 +96,7 @@ const DistributorInfo: React.FC<DistributorInfoProps> = ({
           id="distributor-address"
           name="distributorAddress"
           value={values.address}
-          onChange={(e) => handleChange("address", e.target.value)}
+          onChange={(e) => setFieldValue("address", e.target.value)}
           error={touched.address && Boolean(errors.address)}
           helperText={touched.address && errors.address}
         />
@@ -126,7 +109,7 @@ const DistributorInfo: React.FC<DistributorInfoProps> = ({
           id="distributor-city"
           name="distributorCity"
           value={values.city}
-          onChange={(e) => handleChange("city", e.target.value)}
+          onChange={(e) => setFieldValue("city", e.target.value)}
           error={touched.city && Boolean(errors.city)}
           helperText={touched.city && errors.city}
         />
@@ -139,22 +122,21 @@ const DistributorInfo: React.FC<DistributorInfoProps> = ({
           id="distributor-postal-code"
           name="distributorPostalCode"
           value={values.postalCode}
-          onChange={(e) => handleChange("postalCode", e.target.value)}
+          onChange={(e) => setFieldValue("postalCode", e.target.value)}
           error={touched.postalCode && Boolean(errors.postalCode)}
           helperText={touched.postalCode && errors.postalCode}
         />
       </Grid>
       {/* State Dropdown */}
       <Grid item xs={6} md={4}>
-        <InputLabel htmlFor={"input-id2"}>State</InputLabel>
+        <InputLabel htmlFor="distributor-state">State</InputLabel>
         <Select
           fullWidth
           id="distributor-state"
-          name="distributorState"
+          name="state"
           value={values.state}
-          onChange={(e) => handleChange("state", e.target.value)}
+          onChange={(e) => setFieldValue("state", e.target.value)}
           error={touched.state && Boolean(errors.state)}
-          inputProps={{ id: "input-id2" }}
           MenuProps={{
             PaperProps: {
               sx: {

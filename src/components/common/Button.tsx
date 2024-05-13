@@ -16,6 +16,7 @@ export const ButtonWithProps = styled.button<ButtonProps>`
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
+  margin-right: 0.25rem; // This is the only difference
   cursor: pointer;
   outline: none;
   width: ${(props) => (props.$fullWidth ? "100%" : "auto")};
@@ -82,9 +83,9 @@ export const StyledBackButton = styled.div`
   }
 `;
 
-export const ToggleButton = styled.button<{ $status: "Paid" | "Pending" }>`
+export const ToggleButton = styled.button<{ $status: "PAID" | "UNPAID" }>`
   background-color: ${(props) =>
-    props.$status === "Paid" ? "#08c28d" : "#e89e3f"};
+    props.$status === "PAID" ? "#08c28d" : "#e89e3f"};
   color: white;
   border: none;
   border-radius: 2rem;
@@ -100,7 +101,7 @@ export const ToggleButton = styled.button<{ $status: "Paid" | "Pending" }>`
 
   &:hover {
     background-color: ${(props) =>
-      props.$status === "Paid" ? "#06a57d" : "#c7853c"};
+      props.$status === "PAID" ? "#06a57d" : "#c7853c"};
   }
 
   @media (max-width: 600px) {
@@ -111,10 +112,10 @@ export const ToggleButton = styled.button<{ $status: "Paid" | "Pending" }>`
   }
 `;
 
-export const XIcon = styled.span<{ $status: "Paid" | "Pending" }>`
+export const XIcon = styled.span<{ $status: "PAID" | "UNPAID" }>`
   background-color: #eee9da;
   border: 1px solid
-    ${(props) => (props.$status === "Paid" ? "#08c28d" : "#e89e3f")};
+    ${(props) => (props.$status === "PAID" ? "#08c28d" : "#e89e3f")};
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -122,7 +123,7 @@ export const XIcon = styled.span<{ $status: "Paid" | "Pending" }>`
   width: 2rem;
   height: 2rem;
   font-size: 1.1rem;
-  color: ${(props) => (props.$status === "Paid" ? "#08c28d" : "#e89e3f")};
+  color: ${(props) => (props.$status === "PAID" ? "#08c28d" : "#e89e3f")};
   margin-left: -0.3rem;
 
   @media (max-width: 600px) {

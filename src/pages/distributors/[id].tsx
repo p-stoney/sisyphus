@@ -2,7 +2,9 @@ import type { GetStaticProps, NextPage } from "next";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { api } from "~/utils/api";
 import Head from "next/head";
-import DistributorView from "~/components/DistributorView";
+import DistributorView from "~/components/distributors/DistributorView";
+
+// TODO: Maybe use RouterOutput?
 
 const SingleDistributorPage: NextPage<{ id: string }> = ({ id }) => {
   const { data, isLoading, isError } = api.distributor.getById.useQuery({
@@ -10,7 +12,7 @@ const SingleDistributorPage: NextPage<{ id: string }> = ({ id }) => {
   });
 
   if (isLoading) return <div>Loading...</div>;
-  if (isError || !data) return <div>Invoice not found</div>;
+  if (isError || !data) return <div>Distributor not found</div>;
 
   return (
     <>

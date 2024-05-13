@@ -1,6 +1,7 @@
 import { type PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { type GetByIdDTO } from "../validators";
+import type { ExtendedInvoice } from "~/types";
 
 type GetByIdOptions = {
   input: GetByIdDTO;
@@ -17,6 +18,9 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
     where: {
       id: invoiceId,
     },
+    include: {
+      items: true,
+    },
   });
 
   if (!invoice) {
@@ -26,32 +30,14 @@ export const getById = async ({ input, ctx }: GetByIdOptions) => {
     });
   }
 
-  const invoiceItems = await ctx.db.invoice.findMany({
-    where: {
-      id: invoiceId,
-    },
-    include: {
-      items: true,
-    },
-  });
-
-  if (!invoiceItems) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Invoices not found",
-    });
-  }
-
-  const amountDue = invoiceItems.reduce((acc, curr) => {
-    const total = curr.items.reduce((acc, curr) => {
-      return acc + curr.quantity;
-    }, 0);
-    return acc + total;
-  }, 0);
+  const amountDue = invoice.items.reduce(
+    (sum, item) => sum + item.price.toNumber() * item.quantity,
+    0,
+  );
 
   return {
-    invoice,
-    invoiceItems,
+    ...invoice,
+    items: invoice.items,
     amountDue,
-  };
+  } as ExtendedInvoice;
 };

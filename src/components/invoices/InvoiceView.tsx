@@ -1,20 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
-import { StyledCard } from "./common/Card";
-import { TableWrapper } from "./common/TableWrapper";
-import { Content } from "./common/Content";
-import SingleInvoiceHeader from "./invoices/SingleInvoiceHeader";
-import InvoiceCardContent from "./invoices/InvoiceCardContent";
-import InvoiceTable from "./invoices/InvoiceTable";
+import { StyledCard } from "../common/Card";
+import { TableWrapper } from "../common/TableWrapper";
+import { Content } from "../common/Content";
+import SingleInvoiceHeader from "./SingleInvoiceHeader";
+import InvoiceCardContent from "./InvoiceCardContent";
+import InvoiceTable from "./InvoiceTable";
 
-type InvoiceWithId = RouterOutputs["invoice"]["getById"];
+type InvoiceComputed = RouterOutputs["invoice"]["getById"];
 
-export const InvoiceView: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
-  const { invoice } = props;
+export const InvoiceView: React.FC<InvoiceComputed> = (
+  props: InvoiceComputed,
+) => {
+  const { ...invoice } = props;
+  const [currentStatus, setCurrentStatus] = useState(invoice.status);
   const updateStatusMutation = api.invoice.updateStatus.useMutation();
 
   const handleStatusToggle = () => {
-    const newStatus = invoice.status === "PAID" ? "UNPAID" : "PAID";
+    const newStatus = currentStatus === "PAID" ? "UNPAID" : "PAID";
     updateStatusMutation.mutate(
       {
         invoiceId: invoice.id,
@@ -23,6 +26,7 @@ export const InvoiceView: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
       {
         onSuccess: () => {
           console.log("Status updated successfully.");
+          setCurrentStatus(newStatus);
         },
         onError: (error) => {
           console.error("Failed to update status:", error);
@@ -36,7 +40,7 @@ export const InvoiceView: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
       {invoice && (
         <>
           <SingleInvoiceHeader
-            status={invoice.status.toString() as "Paid" | "Pending"}
+            status={currentStatus.toString() as "PAID" | "UNPAID"}
             onBack={() => window.history.back()}
             onStatusChange={handleStatusToggle}
           />

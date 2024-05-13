@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import {
+  GetBusinessIdSchema,
   CreateAssociationSchema,
   RemoveAssociationSchema,
   DeleteUserSchema,
@@ -12,9 +13,9 @@ import {
 } from "./procedures";
 
 export const userRouter = createTRPCRouter({
-  getBusinessId: protectedProcedure.query(async ({ ctx }) =>
-    getBusinessId({ ctx }),
-  ),
+  getBusinessId: protectedProcedure
+    .input(GetBusinessIdSchema)
+    .query(async ({ input, ctx }) => getBusinessId({ input, ctx })),
 
   createUserAssociation: protectedProcedure
     .input(CreateAssociationSchema)

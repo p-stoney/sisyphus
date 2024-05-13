@@ -1,17 +1,16 @@
-import { type PrismaClient } from "@prisma/client";
+import type { Context } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { type GetAllDTO } from "../validators";
 
 type GetAllOptions = {
-  ctx: {
-    db: PrismaClient;
-    userId: string;
-  };
+  input: GetAllDTO;
+  ctx: Context;
 };
 
-export const getAll = async ({ ctx }: GetAllOptions) => {
-  const { db, userId } = ctx;
+export const getAll = async ({ input, ctx }: GetAllOptions) => {
+  const { userId } = input;
 
-  const invoices = await db.invoice.findMany({
+  const invoices = await ctx.db.invoice.findMany({
     where: {
       business: {
         userId,

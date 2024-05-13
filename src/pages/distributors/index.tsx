@@ -2,7 +2,7 @@ import { useAuth } from "@clerk/nextjs";
 import { useState, useMemo } from "react";
 import { api, type RouterOutputs } from "~/utils/api";
 import type { DFilterCriteria, FilterOption } from "~/types";
-import MainContent from "~/components/common/MainContent";
+import PageContent from "~/components/common/PageContent";
 import { List } from "~/components/common/List";
 import DistributorHeader from "~/components/distributors/DistributorHeader";
 import DistributorItem from "~/components/distributors/DistributorItem";
@@ -15,7 +15,7 @@ const DistributorsPage = () => {
 
   const [filterCriteria, setFilterCriteria] = useState<DFilterCriteria>({
     allInvoicesPaid: undefined,
-    distributorName: undefined,
+    name: undefined,
   });
 
   const { userId } = useAuth();
@@ -35,17 +35,17 @@ const DistributorsPage = () => {
   };
 
   const allInvoicesPaid: FilterOption[] = [
-    { value: "true", label: "All invoices paid" },
-    { value: "false", label: "Some invoices unpaid" },
+    { value: "true", label: "Paid" },
+    { value: "false", label: "Unpaid" },
   ];
 
   const filteredDistributors = useMemo(() => {
     return (
       data?.filter((distributor) => {
-        const matchesName = filterCriteria.distributorName
+        const matchesName = filterCriteria.name
           ? distributor.name
               .toLowerCase()
-              .includes(filterCriteria.distributorName.toLowerCase())
+              .includes(filterCriteria.name.toLowerCase())
           : true;
         const matchesAllInvoicesPaid =
           filterCriteria.allInvoicesPaid !== undefined
@@ -59,7 +59,7 @@ const DistributorsPage = () => {
   }, [data, filterCriteria]);
 
   return (
-    <MainContent>
+    <PageContent>
       <DistributorHeader
         pendingDistributorsCount={pendingDistributorsCount}
         onNewDistributorClick={handleNewDistributorClick}
@@ -72,11 +72,11 @@ const DistributorsPage = () => {
         renderItem={(distributor: Distributor) => (
           <DistributorItem
             key={distributor.id}
-            distributorName={distributor.name}
+            id={distributor.id}
+            name={distributor.name}
             distributorEmail={distributor.email}
             amountDue={distributor.totalUnpaidInvoicesAmount}
             allInvoicesPaid={distributor.allInvoicesPaid}
-            routeName={distributor.id}
           />
         )}
       />
@@ -84,7 +84,7 @@ const DistributorsPage = () => {
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
       />
-    </MainContent>
+    </PageContent>
   );
 };
 

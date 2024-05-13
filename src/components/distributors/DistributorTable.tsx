@@ -1,4 +1,5 @@
 import React from "react";
+import type { RouterOutputs } from "~/utils/api";
 import Link from "next/link";
 import { Table } from "../common/Table";
 import { TableBody, TableCell, TableRow, TableHead, Box } from "@mui/material";
@@ -6,27 +7,26 @@ import { RightCaret } from "../common/RightCaret";
 import { StatusBadge } from "../common/StatusBadge";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { calculateInvoiceAmount } from "~/server/helpers/invoiceUtils";
-import type { InvoiceItem } from "@prisma/client";
 
-interface Invoice {
-  id: string;
-  dueBy: Date;
-  status: "PAID" | "UNPAID";
-  items: InvoiceItem[];
-}
+// TODO: Extract and import table components
 
-interface DistributorTableProps {
-  invoices: Invoice[];
-}
+type DistributorComputed = RouterOutputs["distributor"]["getById"];
 
-const DistributorTable: React.FC<DistributorTableProps> = ({ invoices }) => {
+const DistributorTable: React.FC<DistributorComputed> = (
+  props: DistributorComputed,
+) => {
+  const { invoices } = props;
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  if (!invoices) {
+    return null;
+  }
+
   const totalUnpaidAmount = invoices
     .filter((invoice) => invoice.status === "UNPAID")
-    .reduce((acc, invoice) => acc + calculateInvoiceAmount(invoice.items), 0);
+    .reduce((acc, invoice) => acc + invoice.amountDue, 0);
 
   return (
     <Table>
@@ -74,7 +74,7 @@ const DistributorTable: React.FC<DistributorTableProps> = ({ invoices }) => {
               align="left"
               sx={{ borderBottom: "none", color: "#69635e" }}
             >
-              ${calculateInvoiceAmount(invoice.items).toFixed(2)}
+              ${invoice.amountDue.toFixed(2)}
             </TableCell>
             <TableCell
               align={isMobile ? "center" : "right"}

@@ -1,17 +1,17 @@
 import { z } from "zod";
 
-export const GetByIdSchema = z.object({
-  distributorId: z.string(),
-});
-
 export const GetAllSchema = z.object({
   userId: z.string(),
+});
+
+export const GetByIdSchema = z.object({
+  distributorId: z.string(),
 });
 
 export const ListDistributorsSchema = z.object({
   filterCriteria: z
     .object({
-      distributorName: z.string().optional(),
+      name: z.string().optional(),
       allInvoicesPaid: z.boolean().optional(),
     })
     .optional(),

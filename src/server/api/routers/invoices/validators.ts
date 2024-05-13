@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+export const GetAllSchema = z.object({
+  userId: z.string(),
+});
+
 export const GetByIdSchema = z.object({
   invoiceId: z.string(),
 });
@@ -44,6 +48,7 @@ export const UpdateInvoiceSchema = z.object({
   newStatus: z.enum(["PAID", "UNPAID"]),
 });
 
+export type GetAllDTO = z.TypeOf<typeof GetAllSchema>;
 export type GetByIdDTO = z.TypeOf<typeof GetByIdSchema>;
 export type GetByDistributorIdDTO = z.TypeOf<typeof GetByDistributorIdSchema>;
 export type CreateInvoiceDTO = z.TypeOf<typeof CreateInvoiceSchema>;

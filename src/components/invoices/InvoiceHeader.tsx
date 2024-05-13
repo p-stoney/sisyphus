@@ -28,10 +28,12 @@ const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleCheckboxChange = (option: "paid" | "pending") => {
+  const handleCheckboxChange = (option: "PAID" | "UNPAID") => {
+    const currentStatus = filterCriteria.status;
+    const newValue = currentStatus === option ? undefined : option;
     const updatedCriteria: FilterCriteria = {
       ...filterCriteria,
-      [option]: filterCriteria[option] !== true,
+      status: newValue,
     };
     onFilterChange(updatedCriteria);
   };
@@ -39,16 +41,16 @@ const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({
   const renderInvoiceFilterContent = () => (
     <>
       <div>
-        <label htmlFor="distributorName">Distributor Name:</label>
+        <label htmlFor="name">Distributor Name:</label>
         <InputField
           type="text"
-          id="distributorName"
-          name="distributorName"
-          value={filterCriteria.distributorName || ""}
+          id="name"
+          name="name"
+          value={filterCriteria.name || ""}
           onChange={(e) =>
             onFilterChange({
               ...filterCriteria,
-              distributorName: e.target.value,
+              name: e.target.value,
             })
           }
         />
@@ -72,9 +74,9 @@ const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({
               type="checkbox"
               id={`checkbox-${index}`}
               name={option.value}
-              checked={!!filterCriteria[option.value as keyof FilterCriteria]}
+              checked={filterCriteria.status === option.value}
               onChange={() =>
-                handleCheckboxChange(option.value as "paid" | "pending")
+                handleCheckboxChange(option.value as "PAID" | "UNPAID")
               }
             />
             <label htmlFor={`checkbox-${index}`}>{option.label}</label>

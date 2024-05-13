@@ -24,7 +24,7 @@ const getStatusStyles = ($status: "PAID" | "UNPAID" | "AllInvoicesPaid") => {
   }
 };
 
-const CommonStatusBadge = styled.div<StatusBadgeProps>`
+export const CommonStatusBadge = styled.div<StatusBadgeProps>`
   background-color: ${(props) =>
     getStatusStyles(props.$status).backgroundColor};
   color: ${(props) => getStatusStyles(props.$status).color};

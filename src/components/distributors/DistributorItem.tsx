@@ -50,24 +50,24 @@ const AmountDue = styled.div`
 `;
 
 interface DistributorItemProps {
-  distributorName: string;
+  id: string;
+  name: string;
   distributorEmail: string;
   amountDue: number;
   allInvoicesPaid: boolean;
-  routeName: string;
 }
 
 const DistributorItem: React.FC<DistributorItemProps> = ({
-  distributorName,
+  id,
+  name,
   distributorEmail,
   amountDue,
   allInvoicesPaid,
-  routeName,
 }) => {
   return (
-    <Link href={`/distributors/${routeName}`} passHref>
+    <Link href={`/distributors/${id}`} passHref aria-label="Go to details">
       <DistributorContainer>
-        <DistributorName>{distributorName}</DistributorName>
+        <DistributorName>{name}</DistributorName>
         <DistributorEmail>{distributorEmail}</DistributorEmail>
         <AmountDue>${amountDue.toFixed(2)}</AmountDue>
         <StatusBadge $status={allInvoicesPaid ? "PAID" : "UNPAID"}>

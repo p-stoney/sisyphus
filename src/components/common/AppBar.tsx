@@ -13,8 +13,8 @@ import { Luggage, StoreMallDirectory, AttachMoney } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../assets/logo.png";
-import userProfilePic from "../assets/userProfilePic.jpg";
+import logo from "../../assets/logo.png";
+import userProfilePic from "../../assets/userProfilePic.jpg";
 
 function AppBar() {
   const theme = useTheme();
@@ -52,7 +52,12 @@ function AppBar() {
           }}
         >
           <Avatar>
-            <Image src={userProfilePic} alt="Logo" width={50} height={50} />
+            <Image
+              src={userProfilePic}
+              alt="ProfilePicture"
+              width={50}
+              height={50}
+            />
           </Avatar>
         </Box>
 

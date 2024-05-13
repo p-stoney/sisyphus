@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import {
+  GetAllSchema,
   GetByIdSchema,
   GetByDistributorIdSchema,
   CreateInvoiceSchema,
@@ -14,7 +15,9 @@ import {
 } from "./procedures";
 
 export const invoiceRouter = createTRPCRouter({
-  getAll: protectedProcedure.query(async ({ ctx }) => getAll({ ctx })),
+  getAll: protectedProcedure
+    .input(GetAllSchema)
+    .query(async ({ input, ctx }) => getAll({ input, ctx })),
 
   getById: protectedProcedure
     .input(GetByIdSchema)

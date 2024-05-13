@@ -1,3 +1,4 @@
+// TODO: Delete, is deprecated
 /* eslint-disable @typescript-eslint/require-await */
 import { initTRPC, TRPCError } from "@trpc/server";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
@@ -97,3 +98,35 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 export const privateProcedure = t.procedure.use(isAuthed);
 export const adminProcedure = t.procedure.use(enforceUserIsAdmin);
+
+// Awaited<ReturnType<typeof getAuth>>
+
+// export default async function handler(req: NextApiRequest) {
+//   const userId = getAuth(req);
+
+//   return {
+//     userId,
+//   };
+// }
+
+// interface CreateInnerContextOptions extends Partial<CreateNextContextOptions> {
+//   userId: ReturnType<typeof handler>;
+// }
+
+// export async function createContextInner: CreateInnerContextOptions {
+//   return {
+//     db,
+//     userId,
+//   };
+// }
+
+// export async function createContext(opts: CreateNextContextOptions) {
+//   const auth = getAuth(opts.req);
+//   const contextInner = await createContextInner({ auth });
+
+//   return {
+//     ...contextInner,
+//     req: opts.req,
+//     res: opts.res,
+//   };
+// }

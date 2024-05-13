@@ -11,16 +11,15 @@ export const appRouter = createTRPCRouter({
 
 export type AppRouter = typeof appRouter;
 
-// TODO: In formUtils, look at optional properties of FormValues
+// TODO: Setup environmentMatchGlobs in test.config.js
+// TODO: Remove deprecated procedures and package.json dependencies
+// TODO: Abstract out test matchers and factory functions
+// TODO: Ensure procedures have consistent naming conventions (delete > deleteUser)
+// TODO: Modify createUser to coordinate Clerk userId with User userId
 // TODO: Decide default import or not
-// TODO: Determine return type of procedures
+// TODO: Uniform return type of procedures
 // TODO: Implement dynamic profile picture fetch in AppBar
 // TODO: Compare findUnique to findMany approach in createUserAssociation + removeUserAssociation, decide on best approach
-// TODO: Revisit deleteUser, deleteBusiness, deleteDistributor to implement soft-delete + cascade delete
-// TODO: Refactor update* procedures after creation of front-end * details
-// TODO: Figure out if RBAC in middleware or /server/api/trpc
-// TODO: Revisit testing with createInnerTRPCContext
+// TODO: Implement RBAC with Clerk and User roles
 // TODO: Revisit and refine env.js
-// TODO: Revisit lazy export everything
-// TODO: createCallerFactory as needed for testing
-// export const createCaller = createCallerFactory(appRouter);
+// TODO: Implement lazy loading

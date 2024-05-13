@@ -5,102 +5,77 @@ import type {
   FormikTouched,
 } from "formik";
 import { Grid } from "@mui/material";
+import { ButtonWithProps, PlusIcon } from "../common/Button";
 import FormItem from "../common/FormItem";
-import styled from "styled-components";
-import type { FormValues } from "~/server/helpers/formUtils";
+import type { FormValues as InvoiceFormValues } from "~/server/helpers/formUtils";
+
+// TODO: Fix bad practice index mapping
 
 interface ItemsListProps {
-  values: FormValues;
+  values: InvoiceFormValues;
   arrayHelpers: FieldArrayRenderProps;
-  handleChange: (field: string, value: string | number) => void;
-  errors: FormikErrors<FormValues>;
-  touched: FormikTouched<FormValues>;
+  setFieldValue: (field: string, value: string | number) => void;
+  errors: FormikErrors<InvoiceFormValues>;
+  touched: FormikTouched<InvoiceFormValues>;
 }
-
-interface ButtonProps {
-  $fullWidth?: boolean;
-}
-
-const Button = styled.button<ButtonProps>`
-  background-color: #6096b4;
-  color: white;
-  border: none;
-  border-radius: 2rem;
-  padding: 0.6rem 0.8rem;
-  margin-top: 1rem;
-  font-size: 0.84rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
-  cursor: pointer;
-  margin-right: 0.25rem;
-  outline: none;
-  width: ${(props) => (props.$fullWidth ? "100%" : "auto")};
-
-  &:hover {
-    background-color: #2a7096;
-  }
-`;
-
-const PlusIcon = styled.span`
-  background-color: #eee9da;
-  border: 1px solid #6096b4;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 2rem;
-  height: 2rem;
-  font-size: 0.9rem;
-  color: #6096b4;
-  margin-left: -0.3rem;
-`;
 
 const ItemsList: React.FC<ItemsListProps> = ({
   values,
   arrayHelpers,
-  handleChange,
+  setFieldValue,
   errors,
   touched,
 }) => {
-  const handleRemoveById = (id: string) => {
-    const index = values.items.findIndex((item) => item.id === id);
-    if (index > -1) {
-      arrayHelpers.remove(index);
-    }
+  const handleRemove = (index: number) => {
+    console.log(
+      `Marking item at index ${index} as deleted`,
+      values.items[index],
+    );
+    arrayHelpers.replace(index, { ...values.items[index], isDeleted: true });
   };
 
   return (
     <Grid container spacing={2}>
-      {values.items.map((item) => (
-        <Grid item xs={12} key={item.id}>
-          <FormItem
-            // key={item.id}
-            item={item}
-            handleRemove={() => handleRemoveById(item.id)}
-            handleChange={handleChange}
-            errors={errors}
-            touched={touched}
-          />
-        </Grid>
-      ))}
-      <Button
-        $fullWidth
-        type="button"
-        onClick={() =>
-          arrayHelpers.push({
-            id: Date.now().toString(),
-            name: "",
-            quantity: 1,
-            price: 0.0,
-            productId: "",
-          })
+      {values.items.map((item, index) => {
+        if (item.isDeleted) {
+          console.log(
+            `Item at index ${index} is marked deleted and not rendered`,
+          );
+          return null;
         }
-      >
-        <PlusIcon>+</PlusIcon> Add New Item
-      </Button>
+
+        return (
+          <Grid item xs={12} key={index}>
+            <FormItem
+              item={item}
+              index={index}
+              handleRemove={() => handleRemove(index)}
+              setFieldValue={setFieldValue}
+              errors={
+                (errors.items &&
+                  (errors.items[index] as
+                    | FormikErrors<typeof item>
+                    | undefined)) ||
+                {}
+              }
+              touched={(touched.items && touched.items[index]) || {}}
+            />
+          </Grid>
+        );
+      })}
+      <Grid item xs={12}>
+        <Grid item xs={12}>
+          <ButtonWithProps
+            $fullWidth
+            type="button"
+            onClick={() => {
+              arrayHelpers.push({ name: "", quantity: 0, price: 0, total: 0 });
+            }}
+          >
+            <PlusIcon>+</PlusIcon>Add New Item
+          </ButtonWithProps>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };

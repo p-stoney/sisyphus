@@ -8,36 +8,18 @@ import { type NextPage } from "next";
 import DistributorsPage from "~/pages/distributors";
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser();
-
-  if (!userLoaded) return <div>Loading...</div>;
+  const { isSignedIn } = useUser();
 
   return (
-    <>
-      {isSignedIn ? (
-        <DistributorsPage />
-      ) : (
-        <div className="flex min-h-screen flex-col items-center justify-center">
-          <div className="flex w-full justify-center border-b border-slate-400 p-4">
-            <SignInButton />
-          </div>
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      {!isSignedIn && (
+        <div className="flex justify-center border border-slate-400 p-4">
+          <SignInButton />
         </div>
       )}
-    </>
+      <>{isSignedIn && <DistributorsPage />}</>
+    </div>
   );
 };
 
 export default Home;
-
-//   return (
-//     <PageLayout>
-//       <div className="flex border-b border-slate-400 p-4">
-//         {!isSignedIn && (
-//           <div className="flex justify-center">
-//             <SignInButton />
-//           </div>
-//         )}
-//       </div>
-//     </PageLayout>
-//   );
-// };

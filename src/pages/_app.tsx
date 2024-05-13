@@ -1,13 +1,12 @@
-import Head from "next/head";
-import type { AppType, AppProps } from "next/app";
-import { Toaster } from "react-hot-toast";
-import { ClerkProvider, ClerkLoaded } from "@clerk/nextjs";
 import { api } from "~/utils/api";
-import AppBar from "~/components/AppBar";
-import MainLayout from "~/components/PageLayout";
+import type { AppType, AppProps } from "next/app";
+import { useMediaQuery, useTheme } from "@mui/material";
+import { ClerkProvider, ClerkLoaded } from "@clerk/nextjs";
+import { Toaster } from "react-hot-toast";
 import styled from "styled-components";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
+import AppBar from "~/components/common/AppBar";
+import GlobalStyles from "~/styles/GlobalStyles";
+import PageLayout from "~/components/common/PageLayout";
 import "~/styles/globals.css";
 
 interface AppContainerProps {
@@ -25,22 +24,20 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <ClerkProvider {...pageProps}>
-      <Head>
-        <title>Sisyphus</title>
-        <meta name="description" content="💭" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Toaster position="bottom-center" />
-      <AppContainer $ismobile={isMobile}>
-        <ClerkLoaded>
+    <>
+      <GlobalStyles />
+      <ClerkProvider {...pageProps}>
+        <Toaster position="top-center" />
+        <AppContainer $ismobile={isMobile}>
           <AppBar />
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
-        </ClerkLoaded>
-      </AppContainer>
-    </ClerkProvider>
+          <ClerkLoaded>
+            <PageLayout>
+              <Component {...pageProps} />
+            </PageLayout>
+          </ClerkLoaded>
+        </AppContainer>
+      </ClerkProvider>
+    </>
   );
 };
 

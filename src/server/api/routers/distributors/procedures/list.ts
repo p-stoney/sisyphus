@@ -1,3 +1,4 @@
+// deprecated, can remove
 import { type PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { type ListDistributorsDTO } from "../validators";
@@ -23,9 +24,9 @@ export const list = async ({ input, ctx }: ListOptions) => {
           },
         },
       },
-      ...(filterCriteria?.distributorName && {
+      ...(filterCriteria?.name && {
         name: {
-          contains: filterCriteria.distributorName,
+          contains: filterCriteria.name,
           mode: "insensitive",
         },
       }),

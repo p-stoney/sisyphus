@@ -1,24 +1,25 @@
+import type { Context } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
-import { type PrismaClient } from "@prisma/client";
+import { type GetBusinessDTO } from "../validators";
 
 type GetBusinessIdOptions = {
-  ctx: {
-    db: PrismaClient;
-    userId: string;
-  };
+  input: GetBusinessDTO;
+  ctx: Context;
 };
 
-export const getBusinessId = async ({ ctx }: GetBusinessIdOptions) => {
-  const { db, userId } = ctx;
+export const getBusinessId = async ({ input, ctx }: GetBusinessIdOptions) => {
+  const { userId } = input;
 
-  const user = await db.user.findUnique({
-    where: { id: userId },
+  const user = await ctx.db.user.findUnique({
+    where: {
+      id: userId,
+    },
     include: {
       businesses: true,
     },
   });
 
-  const business = await db.business.findFirst({
+  const business = await ctx.db.business.findFirst({
     where: {
       userId: userId,
     },

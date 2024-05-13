@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import rightCaretIcon from "~/assets/right-caret.svg";
 
 interface CommonRightCaretProps {
   onClick?: () => void;
@@ -24,10 +23,4 @@ const RightCaretStyled = styled.img`
 export const RightCaret: React.FC<CommonRightCaretProps> = ({
   onClick,
   alt,
-}) => (
-  <RightCaretStyled
-    src={rightCaretIcon as string}
-    onClick={onClick}
-    alt={alt}
-  />
-);
+}) => <RightCaretStyled src={"/right-caret.svg"} onClick={onClick} alt={alt} />;

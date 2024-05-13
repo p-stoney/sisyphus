@@ -4,16 +4,10 @@ import { Table } from "../common/Table";
 import { TableBody, TableCell, TableRow, TableHead } from "@mui/material";
 import { calculateTotalAmount } from "~/server/helpers/invoiceUtils";
 
-type InvoiceWithId = RouterOutputs["invoice"]["getById"];
+type InvoiceComputed = RouterOutputs["invoice"]["getById"];
 
-const InvoiceTable: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
-  const { invoiceItems, amountDue } = props;
-
-  if (!invoiceItems) {
-    return null;
-  }
-
-  const items = invoiceItems[0]?.items;
+const InvoiceTable: React.FC<InvoiceComputed> = (props: InvoiceComputed) => {
+  const { items, amountDue } = props;
 
   if (!items) {
     return null;
@@ -47,8 +41,8 @@ const InvoiceTable: React.FC<InvoiceWithId> = (props: InvoiceWithId) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {items.map((item, index) => (
-          <TableRow key={index}>
+        {items.map((item) => (
+          <TableRow key={item.id}>
             <TableCell
               align="left"
               sx={{ borderBottom: "none", color: "#69635e" }}

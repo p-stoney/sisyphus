@@ -42,8 +42,6 @@ export const getByDistributorId = async ({
     id: invoice.id,
     dueBy: invoice.dueBy,
     status: invoice.status,
-    // businessId: invoice.businessId,
-    // distributorId: invoice.distributorId,
     items: invoice.items,
   }));
 };

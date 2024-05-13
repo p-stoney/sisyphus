@@ -8,9 +8,7 @@ type GetAllOptions = {
 };
 
 export const getAll = async ({ input, ctx }: GetAllOptions) => {
-  console.log("input", input);
   const { userId } = input;
-  console.log("userId", userId);
 
   const distributors = await ctx.db.distributor.findMany({
     where: {

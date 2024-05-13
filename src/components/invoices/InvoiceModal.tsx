@@ -1,6 +1,8 @@
 import React from "react";
+import { useAuth } from "@clerk/nextjs";
 import { Formik, Form, FieldArray } from "formik";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Grid } from "@mui/material";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import {
   type FormValues,
@@ -11,6 +13,7 @@ import {
 } from "~/server/helpers/formUtils";
 import DistributorInfo from "../distributors/DistributorInfo";
 import InvoiceDateTerms from "./InvoiceDateTerms";
+import PaymentTermsField from "../common/PaymentTermsField";
 import ItemsList from "./InvoiceItemsList";
 import Modal from "../common/Modal";
 import { ButtonWithProps } from "../common/Button";
@@ -28,10 +31,17 @@ interface InvoiceModalProps {
 }
 
 const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
+  const { userId } = useAuth();
+  const activeId = userId as string;
+
   const [distributorId, setDistributorId] = React.useState("");
+
   const newInvoice = api.invoice.createInvoice.useMutation();
   const { data: businessId, isLoading: isBusinessIdLoading } =
-    api.user.getBusinessId.useQuery();
+    api.user.getBusinessId.useQuery({ userId: activeId });
+
+  const { data: distributors = [], isLoading: areDistributorsLoading } =
+    api.distributor.getAll.useQuery({ userId: activeId });
 
   const handleSubmit = (values: FormValues) => {
     if (!businessId) {
@@ -52,41 +62,52 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
     );
   };
 
-  if (isBusinessIdLoading) return <div>Loading...</div>;
+  if (isBusinessIdLoading || areDistributorsLoading)
+    return <div>Loading...</div>;
   if (!businessId) return <div>Business ID not available.</div>;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="New Invoice">
-      <Formik<FormValues>
+      <Formik
         initialValues={initialFormValues}
-        validationSchema={zodResolver(invoiceValidationSchema)}
+        validationSchema={invoiceValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, handleChange, errors, touched }) => (
+        {({ values, setFieldValue, errors, touched }) => (
           <Form>
             <DistributorInfo
               values={values}
-              handleChange={handleChange}
-              distributors={[]}
+              setFieldValue={setFieldValue}
+              distributors={distributors}
               usStates={usStates}
               setDistributorId={setDistributorId}
               errors={errors}
               touched={touched}
+              isDropdown={true}
             />
-            <InvoiceDateTerms
-              values={values}
-              handleChange={handleChange}
-              paymentTermsOptions={paymentTermsOptions}
-              errors={errors}
-              touched={touched}
-            />
+            <Grid container spacing={2} marginBottom=".75rem">
+              <InvoiceDateTerms
+                setFieldValue={(value) =>
+                  setFieldValue("dateGenerated", Number(value), false)
+                }
+                errors={errors}
+                touched={touched}
+              />
+              <PaymentTermsField
+                paymentTerms={values.paymentTerms}
+                setPaymentTerms={(value) =>
+                  setFieldValue("paymentTerms", Number(value), false)
+                }
+                paymentTermsOptions={paymentTermsOptions}
+              />
+            </Grid>
             <FieldArray
               name="items"
               render={(arrayHelpers) => (
                 <ItemsList
                   values={values}
                   arrayHelpers={arrayHelpers}
-                  handleChange={handleChange}
+                  setFieldValue={setFieldValue}
                   errors={errors}
                   touched={touched}
                 />

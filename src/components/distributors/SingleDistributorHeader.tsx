@@ -15,7 +15,7 @@ const SingleDistributorHeader: React.FC<SingleDistributorHeaderProps> = ({
     <Header>
       <HeaderContent>
         <StyledBackButton onClick={onBack}>
-          <IconButton className="icon-button" data-testid="back-button">
+          <IconButton className="icon-button" aria-label="back">
             <ArrowBackIcon />
           </IconButton>
         </StyledBackButton>

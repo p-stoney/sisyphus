@@ -3,7 +3,7 @@ import { Grid, Select, MenuItem, InputLabel } from "@mui/material";
 
 interface PaymentTermsFieldProps {
   paymentTerms: number;
-  setPaymentTerms: (value: string) => void;
+  setPaymentTerms: (value: number) => void;
   paymentTermsOptions: number[];
 }
 
@@ -13,14 +13,14 @@ const PaymentTermsField: React.FC<PaymentTermsFieldProps> = ({
   paymentTermsOptions,
 }) => {
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} md={6}>
       <InputLabel htmlFor={"input-id"}>Payment Terms</InputLabel>
       <Select
         fullWidth
         id="payment-terms"
         name="paymentTerms"
         value={paymentTerms}
-        onChange={(e) => setPaymentTerms(String(e.target.value))}
+        onChange={(e) => setPaymentTerms(Number(e.target.value))}
         inputProps={{ id: "input-id" }}
       >
         {paymentTermsOptions.map((term) => (
