@@ -41,3 +41,7 @@ When prompted to login through Clerk's Google Provider, use the following creden
 6. To run tests using Vitest: `npm run test`.
 
 [1] These instructions aren't usable until I set up a docker image of my database per start-database.sh.
+
+### TODO prior to Thursday review
+
+1. Commit E2E tests
