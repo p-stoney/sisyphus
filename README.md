@@ -28,7 +28,8 @@ At present, this full-stack solution provides a robust backend foundation for ma
 
 ### Production Deployment
 
-The application can be accessed by visiting `sisyphus-gamma.vercel.app`. When prompted to login through Clerk's Google Provider, use the following credentials: username - `capstone.userexample@gmail.com`, password - `SisyphusUser1`.
+The application can be accessed by visiting `sisyphus-gamma.vercel.app`. 
+When prompted to login through Clerk's Google Provider, use the following credentials: `capstone.userexample@gmail.com` + `SisyphusUser1`.
 
 ### Setup and Installation
 
