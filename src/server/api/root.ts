@@ -1,8 +1,9 @@
 import { createTRPCRouter } from "./trpc";
-import { userRouter } from "./routers/users";
+import { businessRouter } from "./routers/businesses";
 import { distributorRouter } from "./routers/distributors";
 import { invoiceRouter } from "./routers/invoices";
-import { businessRouter } from "./routers/businesses";
+import { productRouter } from "./routers/products";
+import { userRouter } from "./routers/users";
 
 /**
  * Combines all TRPC sub-routers into a single main router for the application.
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   business: businessRouter,
   distributor: distributorRouter,
   invoice: invoiceRouter,
+  product: productRouter,
   user: userRouter,
 });
 

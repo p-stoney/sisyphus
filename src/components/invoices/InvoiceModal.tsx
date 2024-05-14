@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { Formik, Form, FieldArray } from "formik";
 import { Grid } from "@mui/material";
@@ -33,14 +33,24 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
   const { userId } = useAuth();
   const activeId = userId as string;
 
-  const [distributorId, setDistributorId] = React.useState("");
+  const [distributorId, setDistributorId] = useState<string>("");
 
   const newInvoice = api.invoice.create.useMutation();
-  const { data: businessId, isLoading: isBusinessIdLoading } =
-    api.user.getBusinessId.useQuery({ userId: activeId });
 
-  const { data: distributors = [], isLoading: areDistributorsLoading } =
-    api.distributor.getAll.useQuery({ userId: activeId });
+  const { data: businessId } = api.user.getBusinessId.useQuery({
+    userId: activeId,
+  });
+
+  const { data: distributors = [] } = api.distributor.getAll.useQuery({
+    userId: activeId,
+  });
+
+  const { data: products = [] } = api.product.getAll.useQuery(
+    distributorId ? { distributorId } : { distributorId: "" },
+    {
+      enabled: !!distributorId,
+    },
+  );
 
   const handleSubmit = (values: FormValues) => {
     if (!businessId) {
@@ -61,9 +71,10 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
     );
   };
 
-  if (isBusinessIdLoading || areDistributorsLoading)
-    return <div>Loading...</div>;
-  if (!businessId) return <div>Business ID not available.</div>;
+  // if (isBusinessIdLoading || areDistributorsLoading || areProductsLoading)
+  //   return <div>Loading...</div>;
+  // if (!businessId) return <div>Business ID not available.</div>;
+  // if (!distributors.length) return <div>No distributors available.</div>;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="New Invoice">
@@ -87,7 +98,7 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
             <Grid container spacing={2} marginBottom=".75rem">
               <InvoiceDateTerms
                 setFieldValue={(value) =>
-                  setFieldValue("dateGenerated", Number(value), false)
+                  setFieldValue("dateGenerated", Number(value))
                 }
                 errors={errors}
                 touched={touched}
@@ -95,23 +106,26 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
               <PaymentTermsField
                 paymentTerms={values.paymentTerms}
                 setPaymentTerms={(value) =>
-                  setFieldValue("paymentTerms", Number(value), false)
+                  setFieldValue("paymentTerms", Number(value))
                 }
                 paymentTermsOptions={paymentTermsOptions}
               />
             </Grid>
-            <FieldArray
-              name="items"
-              render={(arrayHelpers) => (
-                <ItemsList
-                  values={values}
-                  arrayHelpers={arrayHelpers}
-                  setFieldValue={setFieldValue}
-                  errors={errors}
-                  touched={touched}
-                />
-              )}
-            />
+            {products.length > 0 && (
+              <FieldArray
+                name="items"
+                render={(arrayHelpers) => (
+                  <ItemsList
+                    products={products}
+                    values={values}
+                    arrayHelpers={arrayHelpers}
+                    setFieldValue={setFieldValue}
+                    errors={errors}
+                    touched={touched}
+                  />
+                )}
+              />
+            )}
             <ModalButton type="submit">Save Invoice</ModalButton>
           </Form>
         )}

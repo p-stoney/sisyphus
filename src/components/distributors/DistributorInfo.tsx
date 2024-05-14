@@ -52,9 +52,10 @@ const DistributorInfo: React.FC<DistributorInfoProps> = ({
           labelId="distributor-id"
           distributorId={values.distributorId}
           onChange={(e) => {
-            setFieldValue("distributorId", e.target.value);
+            const id = e.target.value;
+            setFieldValue("distributorId", id);
             if (setDistributorId) {
-              setDistributorId(e.target.value);
+              setDistributorId(id);
             }
           }}
           distributors={distributors}

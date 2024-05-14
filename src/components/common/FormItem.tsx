@@ -2,13 +2,18 @@ import React from "react";
 import type { FormikErrors, FormikTouched } from "formik";
 import {
   Grid,
+  Select,
+  MenuItem,
+  FormHelperText,
   IconButton,
   InputLabel,
   TextField,
   useTheme,
   useMediaQuery,
+  type SelectChangeEvent,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import type { Product } from "@prisma/client";
 
 interface FormItemProps {
   item: {
@@ -32,6 +37,7 @@ interface FormItemProps {
     price: number;
     total: number;
   }>;
+  products: Product[];
 }
 
 const FormItem: React.FC<FormItemProps> = ({
@@ -41,6 +47,7 @@ const FormItem: React.FC<FormItemProps> = ({
   setFieldValue,
   errors,
   touched,
+  products,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -77,10 +84,21 @@ const FormItem: React.FC<FormItemProps> = ({
     } else {
       newValue = value;
     }
-    console.log(
-      `Setting field '${fieldName}' to value '${newValue}' for index ${index}`,
-    );
     setFieldValue(fieldName, newValue);
+  };
+
+  const handleProductChange = (e: SelectChangeEvent<string>) => {
+    const selectedProduct = products.find(
+      (product) => product.id === e.target.value,
+    );
+    if (selectedProduct) {
+      setFieldValue(`items[${index}].name`, selectedProduct.id);
+      setFieldValue(`items[${index}].price`, selectedProduct.price.toString());
+      setFieldValue(
+        `items[${index}].total`,
+        (Number(selectedProduct.price) * item.quantity).toFixed(2),
+      );
+    }
   };
 
   return (
@@ -93,17 +111,27 @@ const FormItem: React.FC<FormItemProps> = ({
     >
       <Grid item xs={12} md={5}>
         <InputLabel htmlFor={`itemName-${index}`}>Item Name</InputLabel>
-        <TextField
+        <Select
+          aria-label={`itemName-${index}`}
           fullWidth
           id={`itemName-${index}`}
           name={`items[${index}].name`}
           value={item.name}
-          type="text"
-          onChange={handleInputChange}
-          error={nameTouched && Boolean(nameError)}
-          helperText={nameTouched && nameError}
-          aria-label={`itemName-${index}`}
-        />
+          onChange={handleProductChange}
+          displayEmpty
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {products.map((product) => (
+            <MenuItem key={product.id} value={product.id}>
+              {product.name}
+            </MenuItem>
+          ))}
+        </Select>
+        {nameTouched && Boolean(nameError) && (
+          <FormHelperText>{nameError}</FormHelperText>
+        )}
       </Grid>
       <Grid item xs={isMobile ? 3 : 6} md={2}>
         <InputLabel htmlFor={`itemQty-${index}`}>Qty.</InputLabel>
@@ -111,7 +139,7 @@ const FormItem: React.FC<FormItemProps> = ({
           fullWidth
           id={`itemQty-${index}`}
           name={`items[${index}].quantity`}
-          value={item.quantity}
+          value={quantity}
           type="number"
           onChange={handleInputChange}
           error={quantityTouched && Boolean(quantityError)}
@@ -124,7 +152,7 @@ const FormItem: React.FC<FormItemProps> = ({
           fullWidth
           id={`itemPrice-${index}`}
           name={`items[${index}].price`}
-          value={item.price}
+          value={price}
           type="text"
           onChange={handleInputChange}
           error={priceTouched && Boolean(priceError)}

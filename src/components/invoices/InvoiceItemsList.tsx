@@ -8,8 +8,10 @@ import { Grid } from "@mui/material";
 import { ButtonWithProps, PlusIcon } from "../common/Button";
 import FormItem from "../common/FormItem";
 import type { FormValues as InvoiceFormValues } from "~/server/helpers/formUtils";
+import type { Product } from "@prisma/client";
 
 interface ItemsListProps {
+  products: Product[];
   values: InvoiceFormValues;
   arrayHelpers: FieldArrayRenderProps;
   setFieldValue: (field: string, value: string | number) => void;
@@ -18,6 +20,7 @@ interface ItemsListProps {
 }
 
 const ItemsList: React.FC<ItemsListProps> = ({
+  products,
   values,
   arrayHelpers,
   setFieldValue,
@@ -25,10 +28,6 @@ const ItemsList: React.FC<ItemsListProps> = ({
   touched,
 }) => {
   const handleRemove = (index: number) => {
-    console.log(
-      `Marking item at index ${index} as deleted`,
-      values.items[index],
-    );
     arrayHelpers.replace(index, { ...values.items[index], isDeleted: true });
   };
 
@@ -36,9 +35,6 @@ const ItemsList: React.FC<ItemsListProps> = ({
     <Grid container spacing={2}>
       {values.items.map((item, index) => {
         if (item.isDeleted) {
-          console.log(
-            `Item at index ${index} is marked deleted and not rendered`,
-          );
           return null;
         }
 
@@ -57,6 +53,7 @@ const ItemsList: React.FC<ItemsListProps> = ({
                 {}
               }
               touched={(touched.items && touched.items[index]) || {}}
+              products={products}
             />
           </Grid>
         );
