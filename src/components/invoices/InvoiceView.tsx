@@ -9,10 +9,7 @@ import InvoiceTable from "./InvoiceTable";
 
 type InvoiceComputed = RouterOutputs["invoice"]["getById"];
 
-export const InvoiceView: React.FC<InvoiceComputed> = (
-  props: InvoiceComputed,
-) => {
-  const { ...invoice } = props;
+const InvoiceView: React.FC<InvoiceComputed> = (invoice) => {
   const [currentStatus, setCurrentStatus] = useState(invoice.status);
   const updateStatusMutation = api.invoice.updateStatus.useMutation();
 
@@ -37,21 +34,19 @@ export const InvoiceView: React.FC<InvoiceComputed> = (
 
   return (
     <Content>
-      {invoice && (
-        <>
-          <SingleInvoiceHeader
-            status={currentStatus.toString() as "PAID" | "UNPAID"}
-            onBack={() => window.history.back()}
-            onStatusChange={handleStatusToggle}
-          />
-          <StyledCard>
-            <InvoiceCardContent {...props} />
-            <TableWrapper>
-              <InvoiceTable {...props} />
-            </TableWrapper>
-          </StyledCard>
-        </>
-      )}
+      <SingleInvoiceHeader
+        status={currentStatus.toString() as "PAID" | "UNPAID"}
+        onBack={() => window.history.back()}
+        onStatusChange={handleStatusToggle}
+      />
+      <StyledCard>
+        <InvoiceCardContent {...invoice} />
+        <TableWrapper>
+          <InvoiceTable {...invoice} />
+        </TableWrapper>
+      </StyledCard>
     </Content>
   );
 };
+
+export default InvoiceView;

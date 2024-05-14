@@ -3,7 +3,7 @@ import Link from "next/link";
 import { api, type RouterOutputs } from "~/utils/api";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
-import { TRPCError } from "@trpc/server";
+// import { TRPCError } from "@trpc/server";
 import { CardContent } from "../common/CardContent";
 import { RightCaret } from "../common/RightCaret";
 import { Typography, Grid, Box } from "@mui/material";
@@ -11,38 +11,15 @@ import { HeaderTypography, EmphasizedTypography } from "../common/Typography";
 
 type InvoiceComputed = RouterOutputs["invoice"]["getById"];
 
-const InvoiceCardContent: React.FC<InvoiceComputed> = (props) => {
-  const { ...invoice } = props;
-
+const InvoiceCardContent: React.FC<InvoiceComputed> = (invoice) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  if (!invoice.id) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Invoice not found",
-    });
-  }
-
-  if (!invoice.distributorId) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Distributor not found",
-    });
-  }
-
   const { distributorId } = invoice;
-
   const { data } = api.distributor.getById.useQuery({
     distributorId,
   });
-
-  if (!data) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Distributor not found",
-    });
-  }
+  const { ...distributor } = data;
 
   return (
     <CardContent>
@@ -120,15 +97,17 @@ const InvoiceCardContent: React.FC<InvoiceComputed> = (props) => {
                     justifyContent: "flex-start",
                   }}
                 >
-                  <EmphasizedTypography>{data.name}</EmphasizedTypography>
-                  <Link href={`/distributor/${data.id}`} passHref>
+                  <EmphasizedTypography>
+                    {distributor.name}
+                  </EmphasizedTypography>
+                  <Link href={`/distributor/${distributor.id}`} passHref>
                     <RightCaret alt="Go to details" />
                   </Link>
                 </Box>
-                <div>{data.address}</div>
-                <div>{data.city}</div>
-                <div>{data.state}</div>
-                <div>{data.postalCode}</div>
+                <div>{distributor.address}</div>
+                <div>{distributor.city}</div>
+                <div>{distributor.state}</div>
+                <div>{distributor.postalCode}</div>
               </Grid>
               <Grid
                 item
@@ -142,7 +121,7 @@ const InvoiceCardContent: React.FC<InvoiceComputed> = (props) => {
                 }}
               >
                 <HeaderTypography>Send To</HeaderTypography>
-                <EmphasizedTypography>{data.email}</EmphasizedTypography>
+                <EmphasizedTypography>{distributor.email}</EmphasizedTypography>
               </Grid>
             </Grid>
           </>
@@ -177,19 +156,21 @@ const InvoiceCardContent: React.FC<InvoiceComputed> = (props) => {
                     justifyContent: "flex-start",
                   }}
                 >
-                  <EmphasizedTypography>{data.name}</EmphasizedTypography>
-                  <Link href={`/distributors/${data.id}`} passHref>
+                  <EmphasizedTypography>
+                    {distributor.name}
+                  </EmphasizedTypography>
+                  <Link href={`/distributors/${distributor.id}`} passHref>
                     <RightCaret alt="Go to details" />
                   </Link>
                 </Box>
-                <div>{data.address}</div>
-                <div>{data.city}</div>
-                <div>{data.state}</div>
-                <div>{data.postalCode}</div>
+                <div>{distributor.address}</div>
+                <div>{distributor.city}</div>
+                <div>{distributor.state}</div>
+                <div>{distributor.postalCode}</div>
               </Grid>
               <Grid item xs={12} sm={4} sx={{ overflowWrap: "anywhere" }}>
                 <HeaderTypography>Send To</HeaderTypography>
-                <EmphasizedTypography>{data.email}</EmphasizedTypography>
+                <EmphasizedTypography>{distributor.email}</EmphasizedTypography>
               </Grid>
             </Grid>
           </>

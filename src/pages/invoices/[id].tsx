@@ -2,7 +2,7 @@ import type { GetStaticProps, NextPage } from "next";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { api } from "~/utils/api";
 import Head from "next/head";
-import { InvoiceView } from "~/components/invoices/InvoiceView";
+import InvoiceView from "~/components/invoices/InvoiceView";
 
 const SingleInvoicePage: NextPage<{ id: string }> = ({ id }) => {
   const { data, isLoading, isError } = api.invoice.getById.useQuery({

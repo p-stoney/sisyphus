@@ -27,7 +27,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const id = context.params?.id as string;
 
-  if (typeof id !== "string") throw new Error("no id");
+  if (typeof id !== "string") throw new Error("Invalid or missing invoice ID.");
 
   await ssg.distributor.getById.prefetch({ distributorId: id });
 
