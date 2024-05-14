@@ -17,6 +17,7 @@ import type { Product } from "@prisma/client";
 
 interface FormItemProps {
   item: {
+    id: string;
     name: string;
     quantity: number;
     price: number;
@@ -92,11 +93,17 @@ const FormItem: React.FC<FormItemProps> = ({
       (product) => product.id === e.target.value,
     );
     if (selectedProduct) {
+      setFieldValue(`items[${index}].id`, selectedProduct.id);
       setFieldValue(`items[${index}].name`, selectedProduct.id);
-      setFieldValue(`items[${index}].price`, selectedProduct.price.toString());
+      setFieldValue(
+        `items[${index}].price`,
+        parseFloat(selectedProduct.price.toString()),
+      );
       setFieldValue(
         `items[${index}].total`,
-        (Number(selectedProduct.price) * item.quantity).toFixed(2),
+        (parseFloat(selectedProduct.price.toString()) * item.quantity).toFixed(
+          2,
+        ),
       );
     }
   };
@@ -153,7 +160,7 @@ const FormItem: React.FC<FormItemProps> = ({
           id={`itemPrice-${index}`}
           name={`items[${index}].price`}
           value={price}
-          type="text"
+          type="number"
           onChange={handleInputChange}
           error={priceTouched && Boolean(priceError)}
           helperText={priceTouched && priceError}
@@ -171,7 +178,6 @@ const FormItem: React.FC<FormItemProps> = ({
       <Grid item xs={isMobile ? 1 : isMediumScreen ? 1 : 2} md={1}>
         <IconButton
           onClick={() => {
-            console.log(`Removing item at index ${index}`);
             handleRemove();
           }}
           aria-label={`remove-item-${index}`}

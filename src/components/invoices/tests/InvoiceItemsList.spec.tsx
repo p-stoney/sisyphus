@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { Formik, Form, type FieldArrayRenderProps } from "formik";
 import ItemsList from "../InvoiceItemsList";
 import { initialFormValues } from "~/__mocks__/mocks";
+import { mockProducts } from "~/__mocks__/mocks";
 
 describe("InvoiceItemsList Component", () => {
   const mockSetFieldValue = vi.fn();
@@ -19,6 +20,7 @@ describe("InvoiceItemsList Component", () => {
       <Formik initialValues={initialFormValues} onSubmit={vi.fn()}>
         <Form>
           <ItemsList
+            products={mockProducts}
             values={initialFormValues}
             arrayHelpers={mockArrayHelpers as FieldArrayRenderProps}
             setFieldValue={mockSetFieldValue}
@@ -54,6 +56,7 @@ describe("InvoiceItemsList Component", () => {
     await user.click(addButton);
 
     expect(mockArrayHelpers.push).toHaveBeenCalledWith({
+      id: "",
       name: "",
       quantity: 0,
       price: 0,

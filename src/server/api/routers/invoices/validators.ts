@@ -18,6 +18,7 @@ export const InvoiceItemSchema = z.object({
 });
 
 export const CreateInvoiceItemSchema = z.object({
+  id: z.string(),
   name: z.string(),
   quantity: z.number().min(1),
   price: z.number().min(0.01),

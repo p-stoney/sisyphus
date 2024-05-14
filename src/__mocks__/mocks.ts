@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, type Product } from "@prisma/client";
 import type { ExtendedDistributor, ExtendedInvoice } from "~/types";
 import type { FormValues as InvoiceFormValues } from "~/server/helpers/formUtils";
 
@@ -136,3 +136,24 @@ export const initialFormValues: InvoiceFormValues = {
     },
   ],
 };
+
+export const mockProducts: Product[] = [
+  {
+    id: "1",
+    name: "Product 1",
+    price: new Prisma.Decimal(100),
+    distributorId: "d1",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  },
+  {
+    id: "2",
+    name: "Product 2",
+    price: new Prisma.Decimal(200),
+    distributorId: "d1",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  },
+];

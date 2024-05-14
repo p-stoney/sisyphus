@@ -4,12 +4,14 @@ import type { FormikErrors, FormikTouched } from "formik";
 import type { FormValues } from "~/server/helpers/formUtils";
 
 interface InvoiceDateAndTermsProps {
-  setFieldValue: (field: string, value: number) => void;
+  values: FormValues;
+  setFieldValue: (field: string, value: string) => void;
   errors: FormikErrors<FormValues>;
   touched: FormikTouched<FormValues>;
 }
 
 const InvoiceDateTerms: React.FC<InvoiceDateAndTermsProps> = ({
+  values,
   setFieldValue,
   errors,
   touched,
@@ -22,10 +24,11 @@ const InvoiceDateTerms: React.FC<InvoiceDateAndTermsProps> = ({
         type="date"
         id="invoice-date"
         name="dateGenerated"
+        value={values.dateGenerated}
         InputLabelProps={{ shrink: true }}
         error={touched.dateGenerated && Boolean(errors.dateGenerated)}
         helperText={touched.dateGenerated && errors.dateGenerated}
-        onChange={(e) => setFieldValue("dateGenerated", Number(e.target.value))}
+        onChange={(e) => setFieldValue("dateGenerated", e.target.value)}
       />
     </Grid>
   );

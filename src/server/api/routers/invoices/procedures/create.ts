@@ -40,10 +40,10 @@ export const create = async ({ input, ctx }: CreateInvoiceOptions) => {
         items: {
           createMany: {
             data: items.map((item) => ({
+              productId: item.id,
               name: item.name,
               quantity: item.quantity,
               price: item.price,
-              productId: "",
             })),
           },
         },

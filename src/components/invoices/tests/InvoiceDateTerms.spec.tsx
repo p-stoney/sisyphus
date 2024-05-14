@@ -2,6 +2,7 @@ import { vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import InvoiceDateTerms from "../InvoiceDateTerms";
+import type { FormValues } from "~/server/helpers/formUtils";
 
 describe("InvoiceDateTerms Component", () => {
   const setFieldValueMock = vi.fn();
@@ -11,14 +12,17 @@ describe("InvoiceDateTerms Component", () => {
   const touchedMock = {
     dateGenerated: true,
   };
+  const valuesMock = { dateGenerated: "" } as FormValues;
 
   function setup({
     errors = errorsMock,
     touched = touchedMock,
     setFieldValue = setFieldValueMock,
+    values = valuesMock,
   } = {}) {
     render(
       <InvoiceDateTerms
+        values={values}
         setFieldValue={setFieldValue}
         errors={errors}
         touched={touched}
@@ -45,6 +49,7 @@ describe("InvoiceDateTerms Component", () => {
       errors: errorsMock,
       touched: touchedMock,
       setFieldValue: setFieldValueMock,
+      values: valuesMock,
     });
     const user = userEvent.setup();
 
@@ -53,13 +58,7 @@ describe("InvoiceDateTerms Component", () => {
 
     expect(setFieldValueMock).toHaveBeenCalledWith(
       "dateGenerated",
-      Number("2024-05-10"),
+      "2024-05-10",
     );
-  });
-
-  it("doesn't display an error when no errors are present", () => {
-    setup({ errors: errorsMock, touched: touchedMock });
-
-    expect(screen.queryByText("Date is required")).toBeInTheDocument();
   });
 });

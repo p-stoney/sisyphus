@@ -31,12 +31,13 @@ const DistributorModal: React.FC<DistributorModalProps> = ({
   onClose,
 }) => {
   const { userId } = useAuth();
-
   const activeId = userId as string;
-
-  const { data: businessId, isLoading: isBusinessIdLoading } =
-    api.user.getBusinessId.useQuery({ userId: activeId });
+  const utils = api.useUtils();
   const newDistributor = api.distributor.create.useMutation();
+
+  const { data: businessId } = api.user.getBusinessId.useQuery({
+    userId: activeId,
+  });
 
   const handleSubmit = async (values: FormValues) => {
     if (!businessId) {
@@ -49,13 +50,12 @@ const DistributorModal: React.FC<DistributorModalProps> = ({
         ...values,
         businessId,
       });
+      await utils.distributor.getAll.invalidate();
       onClose();
     } catch (error) {
       console.error("Failed to create distributor", error);
     }
   };
-
-  if (isBusinessIdLoading) return <div>Loading business details...</div>;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="New Distributor">

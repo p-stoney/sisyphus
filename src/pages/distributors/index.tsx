@@ -11,18 +11,16 @@ import DistributorModal from "~/components/distributors/DistributorModal";
 type Distributor = RouterOutputs["distributor"]["getAll"][number];
 
 const DistributorsPage = () => {
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const { userId } = useAuth();
+  const activeId = userId as string;
 
+  const { data } = api.distributor.getAll.useQuery({ userId: activeId });
+
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [filterCriteria, setFilterCriteria] = useState<DFilterCriteria>({
     allInvoicesPaid: undefined,
     name: undefined,
   });
-
-  const { userId } = useAuth();
-
-  const activeId = userId as string;
-
-  const { data } = api.distributor.getAll.useQuery({ userId: activeId });
 
   const handleNewDistributorClick = () => setModalOpen(true);
 

@@ -32,10 +32,10 @@ interface InvoiceModalProps {
 const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
   const { userId } = useAuth();
   const activeId = userId as string;
+  const utils = api.useUtils();
+  const newInvoice = api.invoice.create.useMutation();
 
   const [distributorId, setDistributorId] = useState<string>("");
-
-  const newInvoice = api.invoice.create.useMutation();
 
   const { data: businessId } = api.user.getBusinessId.useQuery({
     userId: activeId,
@@ -52,29 +52,36 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
     },
   );
 
-  const handleSubmit = (values: FormValues) => {
+  const handleSubmit = async (values: FormValues) => {
     if (!businessId) {
       console.error("Business ID not loaded");
       return;
     }
 
-    newInvoice.mutate(
-      {
-        ...values,
+    const formattedItems = values.items.map((item) => ({
+      ...item,
+      quantity: Number(item.quantity),
+      price: Number(item.price),
+    }));
+
+    const formattedValues = {
+      ...values,
+      items: formattedItems,
+      dateGenerated: values.dateGenerated,
+    };
+
+    try {
+      await newInvoice.mutateAsync({
+        ...formattedValues,
         distributorId: distributorId,
         businessId: businessId,
-      },
-      {
-        onSuccess: () => onClose(),
-        onError: (error) => console.error("Error creating invoice:", error),
-      },
-    );
+      });
+      await utils.invoice.getAll.invalidate();
+      onClose();
+    } catch (error) {
+      console.error("Failed to create invoice", error);
+    }
   };
-
-  // if (isBusinessIdLoading || areDistributorsLoading || areProductsLoading)
-  //   return <div>Loading...</div>;
-  // if (!businessId) return <div>Business ID not available.</div>;
-  // if (!distributors.length) return <div>No distributors available.</div>;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="New Invoice">
@@ -97,9 +104,8 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose }) => {
             />
             <Grid container spacing={2} marginBottom=".75rem">
               <InvoiceDateTerms
-                setFieldValue={(value) =>
-                  setFieldValue("dateGenerated", Number(value))
-                }
+                values={values}
+                setFieldValue={(field, value) => setFieldValue(field, value)}
                 errors={errors}
                 touched={touched}
               />

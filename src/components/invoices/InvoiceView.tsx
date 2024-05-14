@@ -22,7 +22,6 @@ const InvoiceView: React.FC<InvoiceComputed> = (invoice) => {
       },
       {
         onSuccess: () => {
-          console.log("Status updated successfully.");
           setCurrentStatus(newStatus);
         },
         onError: (error) => {

@@ -12,15 +12,14 @@ type Invoice = RouterOutputs["invoice"]["getAll"][number];
 
 const InvoicesPage = () => {
   const { userId } = useAuth();
-
   const activeId = userId as string;
 
   const { data } = api.invoice.getAll.useQuery({ userId: activeId });
 
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const handleNewInvoiceClick = () => setModalOpen(true);
-
   const [filterCriteria, setFilterCriteria] = useState<IFilterCriteria>({});
+
+  const handleNewInvoiceClick = () => setModalOpen(true);
 
   const pendingInvoicesCount = data?.filter(
     (invoice) => invoice.status === "UNPAID",

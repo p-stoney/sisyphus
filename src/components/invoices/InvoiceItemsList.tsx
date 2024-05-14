@@ -64,7 +64,13 @@ const ItemsList: React.FC<ItemsListProps> = ({
             $fullWidth
             type="button"
             onClick={() => {
-              arrayHelpers.push({ name: "", quantity: 0, price: 0, total: 0 });
+              arrayHelpers.push({
+                id: "",
+                name: "",
+                quantity: 0,
+                price: 0,
+                total: 0,
+              });
             }}
           >
             <PlusIcon>+</PlusIcon>Add New Item
