@@ -28,16 +28,20 @@ At present, this full-stack solution provides a robust backend foundation for ma
 
 ### Production Deployment
 
-The application can be accessed by visiting `sisyphus-gamma.vercel.app`. When prompted to login through Clerk's Google Provider, use the following credentials: username - `capstone.userexample@gmail.com`, password - `SisyphusUser1`.
+The application can be accessed by visiting [here](https://sisyphus-gamma.vercel.app/).
+When prompted to login through Clerk's Google Provider, use the following credentials: `capstone.userexample@gmail.com` + `SisyphusUser1`.
 
 ### Setup and Installation
 
-1. Clone the repository with `git clone https://github.com/xxxxx/xxx` *[1]
+1. Clone the repository with `git clone https://github.com/p-stoney/sisyphus.git`
 2. Install dependencies with `npm install`.
 3. Copy the `.env.example` file to a new file named `.env` and fill in appropriate environment variables.
-4. Set up your database with `npm run postinstall`, `npm run db:push`, and `npm run db-seed`. *[2]
+4. Set up your database with `npm run postinstall`, `npm run db:push`, and `npm run db-seed`. [1]
 5. To start the application in development mode with live reloading: `npm run dev`.
 6. To run tests using Vitest: `npm run test`.
 
-* [1] Placeholder as I will submit this in a different repository.
-* [2] These instructions aren't usable until I set up a docker image of my database per start-database.sh.
+[1] These instructions aren't usable until I set up a docker image of my database per start-database.sh.
+
+### TODO prior to Thursday review
+
+1. Commit E2E tests
