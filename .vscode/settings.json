@@ -1,0 +1,21 @@
+{
+    "playwright.workspaceSettings": {
+        "configs": [
+            {
+                "relativeConfigFile": "playwright.config.ts",
+                "selected": true,
+                "enabled": true,
+                "projects": [
+                    {
+                        "name": "Desktop Chrome",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Clerk Login",
+                        "enabled": true
+                    }
+                ]
+            }
+        ]
+    }
+}

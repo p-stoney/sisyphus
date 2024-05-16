@@ -1,21 +1,23 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = process.env.PORT || 3000;
-const baseURL = `http://localhost:${PORT}`;
+const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 export default defineConfig({
-  timeout: 25 * 1000,
+  timeout: 30 * 1000,
   testDir: "e2e/",
   //   retries: 1,
   outputDir: "e2e/test-results/",
   workers: 1,
 
-  webServer: {
-    command: "npm run dev",
-    url: baseURL,
-    timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: process.env.CI
+    ? undefined
+    : {
+        command: "npm run dev",
+        url: baseURL,
+        timeout: 120 * 1000,
+        reuseExistingServer: !process.env.CI,
+      },
 
   use: {
     baseURL,
@@ -23,16 +25,16 @@ export default defineConfig({
   },
 
   projects: [
-    // {
-    //   name: "Clerk Setup",
-    //   testMatch: "e2e/global.setup.ts",
-    // },
+    {
+      name: "Clerk Login",
+      testMatch: "e2e/.auth/login.spec.ts",
+    },
     {
       name: "Desktop Chrome",
       use: {
         ...devices["Desktop Chrome"],
       },
-      //   dependencies: ["Clerk Setup"],
+      dependencies: ["Clerk Login"],
     },
     // {
     //   name: 'Desktop Firefox',

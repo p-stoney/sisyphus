@@ -38,7 +38,23 @@ export const updateStatus = async ({ input, ctx }: UpdateStatusOptions) => {
     });
   }
 
-  if (invoice.businessId !== ctx.userId) {
+  const user = await ctx.db.user.findUnique({
+    where: {
+      id: ctx.userId,
+    },
+    include: {
+      businesses: true,
+    },
+  });
+
+  if (!user) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "User not found",
+    });
+  }
+
+  if (invoice.businessId !== user.businesses[0]!.id) {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: "You do not have permission to update this invoice",

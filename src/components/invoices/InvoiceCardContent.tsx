@@ -19,7 +19,10 @@ const InvoiceCardContent: React.FC<InvoiceComputed> = (invoice) => {
   const { data } = api.distributor.getById.useQuery({
     distributorId,
   });
-  const { ...distributor } = data;
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <CardContent>
@@ -97,17 +100,15 @@ const InvoiceCardContent: React.FC<InvoiceComputed> = (invoice) => {
                     justifyContent: "flex-start",
                   }}
                 >
-                  <EmphasizedTypography>
-                    {distributor.name}
-                  </EmphasizedTypography>
-                  <Link href={`/distributor/${distributor.id}`} passHref>
+                  <EmphasizedTypography>{data.name}</EmphasizedTypography>
+                  <Link href={`/distributor/${data.id}`} passHref>
                     <RightCaret alt="Go to details" />
                   </Link>
                 </Box>
-                <div>{distributor.address}</div>
-                <div>{distributor.city}</div>
-                <div>{distributor.state}</div>
-                <div>{distributor.postalCode}</div>
+                <div>{data.address}</div>
+                <div>{data.city}</div>
+                <div>{data.state}</div>
+                <div>{data.postalCode}</div>
               </Grid>
               <Grid
                 item
@@ -121,7 +122,7 @@ const InvoiceCardContent: React.FC<InvoiceComputed> = (invoice) => {
                 }}
               >
                 <HeaderTypography>Send To</HeaderTypography>
-                <EmphasizedTypography>{distributor.email}</EmphasizedTypography>
+                <EmphasizedTypography>{data.email}</EmphasizedTypography>
               </Grid>
             </Grid>
           </>
@@ -156,21 +157,19 @@ const InvoiceCardContent: React.FC<InvoiceComputed> = (invoice) => {
                     justifyContent: "flex-start",
                   }}
                 >
-                  <EmphasizedTypography>
-                    {distributor.name}
-                  </EmphasizedTypography>
-                  <Link href={`/distributors/${distributor.id}`} passHref>
+                  <EmphasizedTypography>{data.name}</EmphasizedTypography>
+                  <Link href={`/distributors/${data.id}`} passHref>
                     <RightCaret alt="Go to details" />
                   </Link>
                 </Box>
-                <div>{distributor.address}</div>
-                <div>{distributor.city}</div>
-                <div>{distributor.state}</div>
-                <div>{distributor.postalCode}</div>
+                <div>{data.address}</div>
+                <div>{data.city}</div>
+                <div>{data.state}</div>
+                <div>{data.postalCode}</div>
               </Grid>
               <Grid item xs={12} sm={4} sx={{ overflowWrap: "anywhere" }}>
                 <HeaderTypography>Send To</HeaderTypography>
-                <EmphasizedTypography>{distributor.email}</EmphasizedTypography>
+                <EmphasizedTypography>{data.email}</EmphasizedTypography>
               </Grid>
             </Grid>
           </>
