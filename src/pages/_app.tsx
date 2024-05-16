@@ -1,7 +1,13 @@
 import { api } from "~/utils/api";
 import type { AppType, AppProps } from "next/app";
 import { useMediaQuery, useTheme } from "@mui/material";
-import { ClerkProvider, ClerkLoaded } from "@clerk/nextjs";
+import {
+  ClerkProvider,
+  SignedOut,
+  SignedIn,
+  SignInButton,
+  ClerkLoaded,
+} from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
 import styled from "styled-components";
 import AppBar from "~/components/common/AppBar";
@@ -27,15 +33,24 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
     <>
       <GlobalStyles />
       <ClerkProvider {...pageProps}>
-        <Toaster position="top-center" />
-        <AppContainer $ismobile={isMobile}>
-          <AppBar />
-          <ClerkLoaded>
-            <PageLayout>
-              <Component {...pageProps} />
-            </PageLayout>
-          </ClerkLoaded>
-        </AppContainer>
+        <SignedOut>
+          <header className="flex min-h-screen flex-col justify-center">
+            <div className="border-eee9da-400 flex justify-center self-center border p-4">
+              <SignInButton />
+            </div>
+          </header>
+        </SignedOut>
+        <SignedIn>
+          <Toaster position="top-center" />
+          <AppContainer $ismobile={isMobile}>
+            <AppBar />
+            <ClerkLoaded>
+              <PageLayout>
+                <Component {...pageProps} />
+              </PageLayout>
+            </ClerkLoaded>
+          </AppContainer>
+        </SignedIn>
       </ClerkProvider>
     </>
   );

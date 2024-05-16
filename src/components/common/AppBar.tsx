@@ -6,15 +6,14 @@ import {
   Toolbar,
   Tooltip,
   IconButton,
-  Avatar,
   Container,
 } from "@mui/material";
+import { UserButton } from "@clerk/nextjs";
 import { Luggage, StoreMallDirectory, AttachMoney } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
-import userProfilePic from "../../assets/userProfilePic.jpg";
 
 function AppBar() {
   const theme = useTheme();
@@ -51,14 +50,7 @@ function AppBar() {
             mt: 2,
           }}
         >
-          <Avatar>
-            <Image
-              src={userProfilePic}
-              alt="ProfilePicture"
-              width={50}
-              height={50}
-            />
-          </Avatar>
+          <UserButton />
         </Box>
 
         <Toolbar
